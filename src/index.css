@@ -1,1 +1,42 @@
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", monospace;
+  --color-background: #0a0a0a;
+  --color-foreground: #ffffff;
+  --color-accent: #FFE600;
+  --color-accent-secondary: #00FF94;
+  --color-muted: #6b7280;
+  --color-card: #111111;
+  --color-border: #ffffff;
+}
+
+html {
+  background-color: #0a0a0a;
+}
+
+/* Custom scrollbar for neo-brutalist look */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+  border-left: 2px solid #fff;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #FFE600;
+  border: 2px solid #000;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00FF94;
+}
+
+/* Selection style */
+::selection {
+  background: #FFE600;
+  color: #000;
+}
