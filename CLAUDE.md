@@ -178,6 +178,27 @@ Conceptos aprendidos en sesión 2:
 - Cómo funciona RLS y por qué activarlo desde el inicio
 - Por qué no se necesita Prisma cuando se usa Supabase
 
+Sesión 3 — Esquema de base de datos, tipos TypeScript y repositorios base
+Estado: completada (2026-04-20)
+Lo que se hizo:
+- Esquema SQL ejecutado en Supabase: tablas categories, products, orders, order_items
+- Relaciones definidas con foreign keys y restricciones check() a nivel de DB
+- src/types/category.ts creado — interfaz Category + CreateCategoryInput
+- src/types/product.ts creado — interfaz Product + CreateProductInput + UpdateProductInput
+- src/types/order.ts creado — interfaces Order, OrderItem + tipo OrderStatus
+- src/types/index.ts creado — archivo barril para importar todos los tipos desde un solo lugar
+- src/repositories/categoriesRepository.ts creado — getCategories, getCategoryBySlug, createCategory
+- src/repositories/productsRepository.ts creado — getProducts (con filtros), getProductBySlug, createProduct, updateProduct, deleteProduct
+
+Conceptos aprendidos en sesión 3:
+- Repository Pattern: por qué toda comunicación con Supabase va en repositorios y no en componentes
+- Desacoplamiento: si se migra de Supabase a otro proveedor, solo cambian los repositorios
+- Snapshot de datos: por qué unit_price se guarda en order_items y no se lee de products
+- Tipos opcionales con ?: cuándo usar propiedades opcionales (datos de JOIN vs datos base)
+- Omit<> y Partial<>: utilitarios de TypeScript para derivar tipos de inputs desde interfaces base
+- Query dinámica en Supabase: construir el query en pasos para aplicar filtros opcionales
+- Diferencia entre category_id (siempre presente) y category? (solo si se hizo JOIN)
+
 Commits realizados
 Commit	Descripción	Conceptos aprendidos
 —	—	—
@@ -194,7 +215,9 @@ Tailwind v4 + plugin Vite	Tailwind v3 con config.js	v4 es la versión actual, in
 
 ***Próximos pasos inmediatos
 [x] Crear repositorio en GitHub llamado nubeo
-[ ] Definir esquema de base de datos en Supabase (tablas: categories, products, orders, order_items)
-[ ] Crear tipos TypeScript en src/types/ para cada entidad
-[ ] Crear los repositorios base en src/repositories/
+[x] Definir esquema de base de datos en Supabase (tablas: categories, products, orders, order_items)
+[x] Crear tipos TypeScript en src/types/ para cada entidad
+[x] Crear los repositorios base en src/repositories/
+[ ] Crear custom hooks en src/hooks/ que usen los repositorios (useProducts, useCategories)
 [ ] Generar UI base de la landing con v0.dev
+[ ] Conectar la landing con datos reales usando los hooks
