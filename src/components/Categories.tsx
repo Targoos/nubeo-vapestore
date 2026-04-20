@@ -4,50 +4,53 @@ const categories = [
   {
     name: "EQUIPOS",
     slug: "equipos",
+    productCount: 124,
     icon: <EquiposIcon />,
   },
   {
     name: "ATOMIZADORES",
     slug: "atomizadores",
+    productCount: 89,
     icon: <AtomizadoresIcon />,
   },
   {
     name: "REPUESTOS",
     slug: "repuestos",
+    productCount: 256,
     icon: <RepuestosIcon />,
   },
   {
     name: "ESENCIAS",
     slug: "esencias",
+    productCount: 312,
     icon: <EsenciasIcon />,
   },
 ];
 
 export function Categories() {
   return (
-    <section id="categorias" className="bg-[#0a0a0a] py-24">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Section header - minimal */}
-        <div className="mb-16 flex items-end justify-between">
-          <div>
-            <span className="text-xs tracking-[0.3em] text-neutral-500 uppercase">
-              CATEGORIES
-            </span>
-            <h2 className="mt-2 text-4xl sm:text-5xl font-black uppercase tracking-[-0.04em] text-white">
-              BROWSE
-            </h2>
-          </div>
-          <div className="hidden sm:block w-24 h-[3px] bg-[#FF2020] mb-3" />
+    <section id="categorias" className="bg-[#080808] py-24">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        {/* Section header */}
+        <div className="mb-12">
+          <span className="text-xs tracking-[0.2em] text-[#00D4FF] uppercase font-medium">
+            Browse by category
+          </span>
+          <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-white">
+            Shop Categories
+          </h2>
         </div>
 
-        {/* Categories grid - clean 4-column */}
+        {/* Categories grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <CategoryCard
               key={category.slug}
               name={category.name}
               slug={category.slug}
               icon={category.icon}
+              productCount={category.productCount}
+              active={index === 0}
             />
           ))}
         </div>
@@ -56,22 +59,23 @@ export function Categories() {
   );
 }
 
-// Icons - simplified, industrial
+// Icons - clean, minimal line style
 function EquiposIcon() {
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="square"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect x="16" y="6" width="16" height="36" />
-      <line x1="16" y1="12" x2="32" y2="12" />
-      <line x1="16" y1="36" x2="32" y2="36" />
-      <rect x="21" y="18" width="6" height="12" fill="currentColor" />
+      <rect x="10" y="4" width="12" height="24" rx="2" />
+      <line x1="10" y1="8" x2="22" y2="8" />
+      <line x1="10" y1="24" x2="22" y2="24" />
+      <rect x="14" y="12" width="4" height="8" rx="1" fill="currentColor" opacity="0.3" />
     </svg>
   );
 }
@@ -79,18 +83,19 @@ function EquiposIcon() {
 function AtomizadoresIcon() {
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="square"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <rect x="18" y="4" width="12" height="6" />
-      <path d="M14 10h20v6H14z" />
-      <rect x="12" y="16" width="24" height="28" />
-      <line x1="12" y1="28" x2="36" y2="28" />
+      <rect x="12" y="2" width="8" height="4" rx="1" />
+      <path d="M10 6h12v4H10z" />
+      <rect x="8" y="10" width="16" height="20" rx="2" />
+      <line x1="8" y1="18" x2="24" y2="18" />
     </svg>
   );
 }
@@ -98,20 +103,21 @@ function AtomizadoresIcon() {
 function RepuestosIcon() {
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="square"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <circle cx="24" cy="24" r="16" />
-      <circle cx="24" cy="24" r="8" />
-      <line x1="24" y1="8" x2="24" y2="14" />
-      <line x1="24" y1="34" x2="24" y2="40" />
-      <line x1="8" y1="24" x2="14" y2="24" />
-      <line x1="34" y1="24" x2="40" y2="24" />
+      <circle cx="16" cy="16" r="10" />
+      <circle cx="16" cy="16" r="4" />
+      <line x1="16" y1="6" x2="16" y2="10" />
+      <line x1="16" y1="22" x2="16" y2="26" />
+      <line x1="6" y1="16" x2="10" y2="16" />
+      <line x1="22" y1="16" x2="26" y2="16" />
     </svg>
   );
 }
@@ -119,16 +125,18 @@ function RepuestosIcon() {
 function EsenciasIcon() {
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 48 48"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="square"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
-      <path d="M18 4h12v8l6 6v24H12V18l6-6V4z" />
-      <line x1="12" y1="30" x2="36" y2="30" />
+      <path d="M12 4h8v6l4 4v14a2 2 0 01-2 2H10a2 2 0 01-2-2V14l4-4V4z" />
+      <line x1="8" y1="20" x2="24" y2="20" />
+      <circle cx="16" cy="24" r="2" fill="currentColor" opacity="0.3" />
     </svg>
   );
 }
