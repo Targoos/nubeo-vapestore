@@ -1,25 +1,28 @@
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 export function Navbar() {
   const [cartCount] = useState(2);
+  const location = useLocation();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#080808]/95 backdrop-blur-sm border-b border-[#1a1a1a]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo - left */}
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <span className="text-lg font-semibold tracking-[0.2em] text-white uppercase">
               NUBEO
             </span>
-          </a>
+          </Link>
 
           {/* Navigation Links - center */}
           <div className="hidden md:flex items-center gap-10">
-            <NavLink href="/equipos" active>EQUIPOS</NavLink>
-            <NavLink href="/atomizadores">ATOMIZADORES</NavLink>
-            <NavLink href="/repuestos">REPUESTOS</NavLink>
-            <NavLink href="/esencias">ESENCIAS</NavLink>
+            <NavLink to="/catalogo" active={location.pathname === "/catalogo"}>CATÁLOGO</NavLink>
+            <NavLink to="/equipos" active={location.pathname === "/equipos"}>EQUIPOS</NavLink>
+            <NavLink to="/atomizadores" active={location.pathname === "/atomizadores"}>ATOMIZADORES</NavLink>
+            <NavLink to="/repuestos" active={location.pathname === "/repuestos"}>REPUESTOS</NavLink>
+            <NavLink to="/esencias" active={location.pathname === "/esencias"}>ESENCIAS</NavLink>
           </div>
 
           {/* Cart - right */}
@@ -47,21 +50,21 @@ export function Navbar() {
 }
 
 interface NavLinkProps {
-  href: string;
+  to: string;
   children: React.ReactNode;
   active?: boolean;
 }
 
-function NavLink({ href, children, active }: NavLinkProps) {
+function NavLink({ to, children, active }: NavLinkProps) {
   return (
-    <a
-      href={href}
+    <Link
+      to={to}
       className={`nav-link text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-200 ${
         active ? "text-[#00D4FF]" : "text-[#444444] hover:text-white"
       }`}
     >
       {children}
-    </a>
+    </Link>
   );
 }
 
