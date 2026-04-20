@@ -28,14 +28,14 @@ function Footer() {
               NUBEO
             </span>
             <p className="mt-4 text-sm text-[#444444] leading-relaxed">
-              Premium vaping equipment and accessories. Quality you can trust.
+              Equipos de vapeo premium y accesorios. Calidad en la que puedes confiar.
             </p>
           </div>
 
           {/* Links */}
           <div>
             <span className="text-xs tracking-[0.15em] text-white uppercase font-medium">
-              Shop
+              Tienda
             </span>
             <ul className="mt-4 space-y-3">
               <li><FooterLink href="/equipos">Equipos</FooterLink></li>
@@ -47,13 +47,13 @@ function Footer() {
 
           <div>
             <span className="text-xs tracking-[0.15em] text-white uppercase font-medium">
-              Support
+              Soporte
             </span>
             <ul className="mt-4 space-y-3">
-              <li><FooterLink href="/contacto">Contact</FooterLink></li>
-              <li><FooterLink href="/faq">FAQ</FooterLink></li>
-              <li><FooterLink href="/envios">Shipping</FooterLink></li>
-              <li><FooterLink href="/devoluciones">Returns</FooterLink></li>
+              <li><FooterLink href="/contacto">Contacto</FooterLink></li>
+              <li><FooterLink href="/faq">Preguntas Frecuentes</FooterLink></li>
+              <li><FooterLink href="/envios">Envíos</FooterLink></li>
+              <li><FooterLink href="/devoluciones">Devoluciones</FooterLink></li>
             </ul>
           </div>
 
@@ -62,8 +62,8 @@ function Footer() {
               Legal
             </span>
             <ul className="mt-4 space-y-3">
-              <li><FooterLink href="/terminos">Terms</FooterLink></li>
-              <li><FooterLink href="/privacidad">Privacy</FooterLink></li>
+              <li><FooterLink href="/terminos">Términos</FooterLink></li>
+              <li><FooterLink href="/privacidad">Privacidad</FooterLink></li>
             </ul>
           </div>
         </div>
@@ -71,7 +71,7 @@ function Footer() {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-[#1a1a1a] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[#444444]">
-            2026 Nubeo. All rights reserved.
+            2026 Nubeo. Todos los derechos reservados.
           </p>
           <div className="flex items-center gap-4">
             <SocialLink href="#" aria-label="Instagram">

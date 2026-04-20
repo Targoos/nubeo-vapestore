@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { CategoryCard } from "./CategoryCard";
 
 const categories = [
@@ -28,16 +29,42 @@ const categories = [
 ];
 
 export function Categories() {
+  const [visibleCards, setVisibleCards] = useState<number[]>([]);
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true;
+          categories.forEach((_, index) => {
+            setTimeout(() => {
+              setVisibleCards((prev) => [...prev, index]);
+            }, index * 100);
+          });
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="categorias" className="bg-[#080808] py-24">
+    <section id="categorias" className="bg-[#080808] py-24" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section header */}
         <div className="mb-12">
           <span className="text-xs tracking-[0.2em] text-[#00D4FF] uppercase font-medium">
-            Browse by category
+            Explorar por categoría
           </span>
           <h2 className="mt-2 text-3xl sm:text-4xl font-semibold text-white">
-            Shop Categories
+            Categorías
           </h2>
         </div>
 
@@ -51,6 +78,7 @@ export function Categories() {
               icon={category.icon}
               productCount={category.productCount}
               active={index === 0}
+              visible={visibleCards.includes(index)}
             />
           ))}
         </div>

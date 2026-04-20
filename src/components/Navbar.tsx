@@ -25,7 +25,7 @@ export function Navbar() {
           {/* Cart - right */}
           <button
             className="relative flex items-center gap-2 px-4 py-2 bg-transparent text-white border border-[#00D4FF] rounded-md hover:bg-[#00D4FF]/10 transition-colors duration-200"
-            aria-label="Shopping cart"
+            aria-label="Carrito de compras"
           >
             <CartIcon />
             <span className="text-xs font-medium tracking-wider text-[#00D4FF]">
@@ -36,7 +36,7 @@ export function Navbar() {
           {/* Mobile menu button */}
           <button
             className="md:hidden p-2 text-[#444444] hover:text-white transition-colors"
-            aria-label="Menu"
+            aria-label="Menú"
           >
             <MenuIcon />
           </button>
@@ -56,7 +56,7 @@ function NavLink({ href, children, active }: NavLinkProps) {
   return (
     <a
       href={href}
-      className={`text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-200 ${
+      className={`nav-link text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-200 ${
         active ? "text-[#00D4FF]" : "text-[#444444] hover:text-white"
       }`}
     >

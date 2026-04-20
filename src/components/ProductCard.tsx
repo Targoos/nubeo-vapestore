@@ -3,19 +3,25 @@ interface ProductCardProps {
   brand: string;
   price: number;
   image?: string;
+  visible?: boolean;
 }
 
-export function ProductCard({ name, brand, price }: ProductCardProps) {
+export function ProductCard({ name, brand, price, visible = true }: ProductCardProps) {
   return (
-    <div className="group relative bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg overflow-hidden hover:border-[#1a1a1a] transition-all duration-200">
+    <div 
+      className={`group relative bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg overflow-hidden transition-all duration-200 ease-out hover:-translate-y-1 hover:border-[#00D4FF44] ${
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+      }`}
+      style={{ transitionProperty: "opacity, transform, border-color", transitionDuration: "0.6s, 0.2s, 0.2s" }}
+    >
       {/* Product image area */}
       <div className="relative aspect-square bg-[#0a0a0a] flex items-center justify-center overflow-hidden">
         <div className="w-24 h-32 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] rounded-lg" />
         
         {/* Quick add overlay */}
-        <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 ease-out">
           <button className="px-6 py-2.5 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors">
-            ADD TO CART
+            AGREGAR
           </button>
         </div>
       </div>
@@ -39,7 +45,7 @@ export function ProductCard({ name, brand, price }: ProductCardProps) {
           </span>
           <button 
             className="p-2 text-[#444444] hover:text-white transition-colors"
-            aria-label="Add to wishlist"
+            aria-label="Agregar a favoritos"
           >
             <HeartIcon />
           </button>

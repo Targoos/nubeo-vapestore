@@ -4,9 +4,10 @@ interface CategoryCardProps {
   icon: React.ReactNode;
   productCount: number;
   active?: boolean;
+  visible?: boolean;
 }
 
-export function CategoryCard({ name, slug, icon, productCount, active }: CategoryCardProps) {
+export function CategoryCard({ name, slug, icon, productCount, active, visible = true }: CategoryCardProps) {
   return (
     <a
       href={`/${slug}`}
@@ -14,7 +15,8 @@ export function CategoryCard({ name, slug, icon, productCount, active }: Categor
         active 
           ? "border-[#00D4FF]" 
           : "border-[#1a1a1a] hover:border-[#00D4FF]/50"
-      }`}
+      } ${visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
+      style={{ transitionProperty: "opacity, transform, border-color", transitionDuration: "0.6s, 0.6s, 0.2s" }}
     >
       {/* Icon */}
       <div className={`mb-4 transition-colors duration-200 ${
