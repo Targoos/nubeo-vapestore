@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ProductCard } from "./ProductCard";
+import { ProductCard } from "../../components/ProductCard";
 
 const featuredProducts = [
   {
@@ -62,8 +62,8 @@ export function FeaturedProducts() {
               Más Vendidos
             </h2>
           </div>
-          <a 
-            href="/productos" 
+          <a
+            href="/productos"
             className="hidden sm:flex items-center gap-2 text-sm text-[#444444] hover:text-white transition-colors"
           >
             <span className="uppercase tracking-[0.1em]">Ver Todo</span>
@@ -97,8 +97,8 @@ export function FeaturedProducts() {
 
         {/* Mobile view all link */}
         <div className="mt-8 sm:hidden text-center">
-          <a 
-            href="/productos" 
+          <a
+            href="/productos"
             className="inline-flex items-center gap-2 text-sm text-[#00D4FF]"
           >
             <span className="uppercase tracking-[0.1em]">Ver Todos los Productos</span>

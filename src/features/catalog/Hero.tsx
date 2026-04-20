@@ -21,7 +21,7 @@ export function Hero() {
 
           {/* Subtitle */}
           <p className="animate-fade-in-up delay-200 mt-6 text-lg text-[#444444] max-w-xl leading-relaxed">
-            Descubre nuestra colección de equipos de vapeo premium. 
+            Descubre nuestra colección de equipos de vapeo premium.
             Dispositivos de calidad, sabores auténticos, experiencia excepcional.
           </p>
 

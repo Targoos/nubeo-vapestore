@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { CategoryCard } from "./CategoryCard";
+import { CategoryCard } from "../../components/CategoryCard";
 
 const categories = [
   {
@@ -87,7 +87,6 @@ export function Categories() {
   );
 }
 
-// Icons - clean, minimal line style
 function EquiposIcon() {
   return (
     <svg
