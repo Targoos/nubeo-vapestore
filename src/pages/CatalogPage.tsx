@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { ProductCard } from "../components/ProductCard";
@@ -31,7 +32,16 @@ const SORT_OPTIONS = [
   { value: "newest", label: "Más nuevos" },
 ];
 
+// Maps URL slug → display name used in product data
+const CATEGORY_SLUG_MAP: Record<string, string> = {
+  equipos: "Equipos",
+  atomizadores: "Atomizadores",
+  repuestos: "Repuestos",
+  esencias: "Esencias",
+};
+
 export function CatalogPage() {
+  const [searchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     categories: [] as string[],
     brands: [] as string[],
@@ -42,6 +52,16 @@ export function CatalogPage() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [visibleProducts, setVisibleProducts] = useState<number[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Sync ?categoria= query param to the categories filter
+  useEffect(() => {
+    const slug = searchParams.get("categoria");
+    const categoryName = slug ? CATEGORY_SLUG_MAP[slug] : null;
+    setFilters((prev) => ({
+      ...prev,
+      categories: categoryName ? [categoryName] : [],
+    }));
+  }, [searchParams]);
 
   // Filter and sort products
   const filteredProducts = PRODUCTS.filter((product) => {

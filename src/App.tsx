@@ -1,24 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
-import { Hero } from "./features/catalog/Hero";
-import { Categories } from "./features/catalog/Categories";
-import { FeaturedProducts } from "./features/catalog/FeaturedProducts";
+import { HomePage } from "./pages/HomePage";
 import { CatalogPage } from "./pages/CatalogPage";
-
-function HomePage() {
-  return (
-    <div className="min-h-screen bg-[#080808]">
-      <Navbar />
-      <main>
-        <Hero />
-        <Categories />
-        <FeaturedProducts />
-      </main>
-      <Footer />
-    </div>
-  );
-}
+import { ProductPage } from "./pages/ProductPage";
+import { CartPage } from "./pages/CartPage";
+import { CheckoutPage } from "./pages/CheckoutPage";
+import { LoginPage } from "./pages/LoginPage";
+import { RegisterPage } from "./pages/RegisterPage";
+import { AdminPage } from "./pages/AdminPage";
 
 function App() {
   return (
@@ -26,6 +14,12 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/catalogo" element={<CatalogPage />} />
+        <Route path="/producto/:id" element={<ProductPage />} />
+        <Route path="/carrito" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/registro" element={<RegisterPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export function Footer() {
   return (
     <footer className="bg-[#080808] border-t border-[#1a1a1a] py-16">
@@ -19,10 +21,10 @@ export function Footer() {
               Tienda
             </span>
             <ul className="mt-4 space-y-3">
-              <li><FooterLink href="/equipos">Equipos</FooterLink></li>
-              <li><FooterLink href="/atomizadores">Atomizadores</FooterLink></li>
-              <li><FooterLink href="/repuestos">Repuestos</FooterLink></li>
-              <li><FooterLink href="/esencias">Esencias</FooterLink></li>
+              <li><FooterLink href="/catalogo?categoria=equipos">Equipos</FooterLink></li>
+              <li><FooterLink href="/catalogo?categoria=atomizadores">Atomizadores</FooterLink></li>
+              <li><FooterLink href="/catalogo?categoria=repuestos">Repuestos</FooterLink></li>
+              <li><FooterLink href="/catalogo?categoria=esencias">Esencias</FooterLink></li>
             </ul>
           </div>
 
@@ -70,12 +72,12 @@ export function Footer() {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
-    <a
-      href={href}
+    <Link
+      to={href}
       className="text-sm text-[#444444] hover:text-white transition-colors"
     >
       {children}
-    </a>
+    </Link>
   );
 }
 

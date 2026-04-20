@@ -7,10 +7,12 @@ interface CategoryCardProps {
   visible?: boolean;
 }
 
+import { Link } from "react-router-dom";
+
 export function CategoryCard({ name, slug, icon, productCount, active, visible = true }: CategoryCardProps) {
   return (
-    <a
-      href={`/${slug}`}
+    <Link
+      to={`/catalogo?categoria=${slug}`}
       className={`group relative block bg-[#0d0d0d] border rounded-lg p-6 transition-all duration-200 ${
         active 
           ? "border-[#00D4FF]" 
@@ -51,6 +53,6 @@ export function CategoryCard({ name, slug, icon, productCount, active, visible =
           <path d="M7 17L17 7M17 7H7M17 7V17" />
         </svg>
       </div>
-    </a>
+    </Link>
   );
 }

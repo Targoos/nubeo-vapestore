@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 
 export function Navbar() {
   const [cartCount] = useState(2);
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const currentCategoria = searchParams.get("categoria");
+
+  const isCatalogActive = location.pathname === "/catalogo" && !currentCategoria;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#080808]/95 backdrop-blur-sm border-b border-[#1a1a1a]">
@@ -18,11 +22,11 @@ export function Navbar() {
 
           {/* Navigation Links - center */}
           <div className="hidden md:flex items-center gap-10">
-            <NavLink to="/catalogo" active={location.pathname === "/catalogo"}>CATÁLOGO</NavLink>
-            <NavLink to="/equipos" active={location.pathname === "/equipos"}>EQUIPOS</NavLink>
-            <NavLink to="/atomizadores" active={location.pathname === "/atomizadores"}>ATOMIZADORES</NavLink>
-            <NavLink to="/repuestos" active={location.pathname === "/repuestos"}>REPUESTOS</NavLink>
-            <NavLink to="/esencias" active={location.pathname === "/esencias"}>ESENCIAS</NavLink>
+            <NavLink to="/catalogo" active={isCatalogActive}>CATÁLOGO</NavLink>
+            <NavLink to="/catalogo?categoria=equipos" active={currentCategoria === "equipos"}>EQUIPOS</NavLink>
+            <NavLink to="/catalogo?categoria=atomizadores" active={currentCategoria === "atomizadores"}>ATOMIZADORES</NavLink>
+            <NavLink to="/catalogo?categoria=repuestos" active={currentCategoria === "repuestos"}>REPUESTOS</NavLink>
+            <NavLink to="/catalogo?categoria=esencias" active={currentCategoria === "esencias"}>ESENCIAS</NavLink>
           </div>
 
           {/* Cart - right */}
