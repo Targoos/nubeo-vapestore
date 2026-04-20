@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "Inter", "Inter Fallback", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "JetBrains Mono Fallback", monospace;
+  --font-sans: system-ui, -apple-system, sans-serif;
+  --font-mono: "SF Mono", "Monaco", monospace;
   --color-background: #0a0a0a;
   --color-foreground: #ffffff;
-  --color-accent: #FFE600;
-  --color-accent-secondary: #00FF94;
-  --color-muted: #6b7280;
-  --color-card: #111111;
+  --color-accent: #FF2020;
+  --color-muted: #525252;
+  --color-card: #0a0a0a;
   --color-border: #ffffff;
 }
 
@@ -16,27 +15,32 @@ html {
   background-color: #0a0a0a;
 }
 
-/* Custom scrollbar for neo-brutalist look */
+/* Minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
   background: #0a0a0a;
-  border-left: 2px solid #fff;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FFE600;
-  border: 2px solid #000;
+  background: #333;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00FF94;
+  background: #FF2020;
 }
 
-/* Selection style */
+/* Selection */
 ::selection {
-  background: #FFE600;
-  color: #000;
+  background: #FF2020;
+  color: #fff;
+}
+
+/* Custom border width */
+@layer utilities {
+  .border-3 {
+    border-width: 3px;
+  }
 }
