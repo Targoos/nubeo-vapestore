@@ -218,16 +218,42 @@ Lo que se hizo:
 - src/App.tsx — Routing completo con React Router: /, /catalogo, /producto/:id, /carrito, /checkout, /login, /registro, /admin
 - Commits realizados en GitHub con PRs mergeados
 
-ADVERTENCIA: Categories.tsx y FeaturedProducts.tsx usan datos MOCK (arrays hardcodeados).
-Los hooks useProducts y useCategories existen y están listos, pero AÚN NO están
-conectados a ningún componente visual. Esta es la deuda técnica más urgente.
-
 Conceptos aprendidos en sesión 4:
 - IntersectionObserver: cómo detectar cuándo un elemento entra en pantalla para animar
 - Query params en React Router: useSearchParams para leer ?categoria= y sincronizarlo con el estado de filtros
 - Composición de páginas: una Page combina componentes de features + componentes compartidos
 - Design tokens: por qué centralizar los valores de diseño evita inconsistencias
 - Staggered animations: mostrar elementos uno tras otro con setTimeout para dar efecto visual
+
+Sesión 5 — Integración de datos reales, ProductPage y useProduct
+Estado: completada (2026-04-21)
+Lo que se hizo:
+- src/hooks/useProduct.ts creado — hook para obtener un producto individual por slug
+- src/pages/ProductPage.tsx implementada con datos reales de Supabase:
+  - Galería de imágenes con selector de miniaturas
+  - Selector de cantidad (mín 1, máx product.stock)
+  - Badge de stock (En Stock / Sin Stock)
+  - Formato de precio en CLP (es-CL locale)
+  - Tabs de Descripción y Reseñas (reseñas placeholder)
+  - Breadcrumb de navegación
+  - Estados de carga y error (404)
+- src/features/catalog/Categories.tsx — CONECTADA a Supabase con useCategories (eliminado el mock)
+  - Íconos SVG asignados por slug vía ICON_BY_SLUG map
+  - Estados de carga (skeleton) y error
+- src/features/catalog/FeaturedProducts.tsx — CONECTADA a Supabase con useProducts (eliminado el mock)
+  - Filtra onlyActive: true, muestra los primeros 3 productos
+  - Estados de carga y error
+- src/pages/CatalogPage.tsx — CONECTADA a Supabase con useProducts + useCategories (eliminado el mock)
+  - Filtros reales: categoría, marca (derivada de datos), precio, stock
+  - Ordenamiento: relevancia, precio asc/desc, más nuevo
+  - Paginación (UI presente, lógica pendiente de completar)
+
+Conceptos aprendidos en sesión 5:
+- useProduct vs useProducts: cuándo necesitar un hook para un ítem único
+- Slug como identificador de URL: más legible y SEO-friendly que el ID numérico
+- Datos opcionales con renderizado condicional: product.brand && <span>...
+- useMemo para derivar datos: calcular las marcas disponibles sin re-renderizar innecesariamente
+- Skeleton loading: mostrar placeholders con la forma del contenido real mientras carga
 
 Commits realizados
 Commit	Descripción	Sesión
@@ -239,26 +265,32 @@ bc3c481	feat: add smooth animations and Spanish translations	4
 398668e	refactor: restructure project directory into feature-based modules	4
 9361150	feat: add catalog page and routing	4
 d5ede8e	feat: implement full routing structure and update navigation	4
+5fe5891	feat: implement ProductPage component with design tokens	5
+cbb986e	feat: implement product slug-based navigation and add useProduct hook	5
+7088781	feat: integrate Supabase data for categories and products	5
 
-***Estado actual del código (2026-04-20)
+***Estado actual del código (2026-04-21)
 
-COMPLETADO y funcional:
+COMPLETADO y con datos reales de Supabase:
 - src/lib/supabase.ts — cliente Supabase listo
-- src/lib/designTokens.ts — tokens de diseño
+- src/lib/designTokens.ts — tokens de diseño centralizados
 - src/types/ — todas las interfaces TypeScript (Category, Product, Order, OrderItem)
 - src/repositories/categoriesRepository.ts — getCategories, getCategoryBySlug, createCategory
-- src/repositories/productsRepository.ts — getProducts, getProductBySlug, createProduct, updateProduct, deleteProduct
-- src/hooks/useProducts.ts — hook listo (NO conectado a UI todavía)
-- src/hooks/useCategories.ts — hook listo (NO conectado a UI todavía)
-- src/components/Navbar.tsx — navegación completa con React Router y query params
-- src/components/Footer.tsx — footer
-- src/components/CategoryCard.tsx — tarjeta de categoría
-- src/components/ProductCard.tsx — tarjeta de producto
-- src/features/catalog/Hero.tsx — hero animado (datos estáticos, no necesita Supabase)
-- src/features/catalog/Categories.tsx — sección categorías (MOCK DATA — pendiente conectar)
-- src/features/catalog/FeaturedProducts.tsx — productos destacados (MOCK DATA — pendiente conectar)
-- src/pages/HomePage.tsx — landing page funcional visualmente
-- src/pages/CatalogPage.tsx — catálogo completo con filtros (MOCK DATA — pendiente conectar)
+- src/repositories/productsRepository.ts — getProducts (con filtros), getProductBySlug, createProduct, updateProduct, deleteProduct
+- src/hooks/useCategories.ts — conectado y funcionando
+- src/hooks/useProducts.ts — conectado y funcionando
+- src/hooks/useProduct.ts — hook para producto individual por slug
+- src/hooks/index.ts — barrel de hooks (nota: useProduct no está exportado aquí, se importa directo)
+- src/components/Navbar.tsx — navegación con React Router y query params
+- src/components/Footer.tsx — footer completo
+- src/components/CategoryCard.tsx — tarjeta de categoría reutilizable
+- src/components/ProductCard.tsx — tarjeta de producto reutilizable
+- src/features/catalog/Hero.tsx — hero animado con IntersectionObserver (stats estáticos, OK)
+- src/features/catalog/Categories.tsx — conectada a Supabase con useCategories ✅
+- src/features/catalog/FeaturedProducts.tsx — conectada a Supabase con useProducts ✅
+- src/pages/HomePage.tsx — landing page funcional con datos reales
+- src/pages/CatalogPage.tsx — catálogo con filtros y datos reales de Supabase ✅
+- src/pages/ProductPage.tsx — detalle de producto con datos reales de Supabase ✅
 - src/App.tsx — routing completo con todas las rutas definidas
 
 VACÍOS (solo estructura de carpetas, sin código):
@@ -270,13 +302,21 @@ VACÍOS (solo estructura de carpetas, sin código):
 - src/utils/ — sin archivos todavía
 - src/repositories/ordersRepository.ts — no creado todavía
 
-PÁGINAS PLACEHOLDER (archivo creado pero sin implementar):
-- src/pages/ProductPage.tsx — detalle de producto
-- src/pages/CartPage.tsx — carrito
-- src/pages/CheckoutPage.tsx — checkout
-- src/pages/LoginPage.tsx — login
-- src/pages/RegisterPage.tsx — registro
-- src/pages/AdminPage.tsx — panel admin
+PÁGINAS PLACEHOLDER ("En construcción"):
+- src/pages/CartPage.tsx
+- src/pages/CheckoutPage.tsx
+- src/pages/LoginPage.tsx
+- src/pages/RegisterPage.tsx
+- src/pages/AdminPage.tsx
+
+***Deuda técnica (funciona pero hay que mejorar)
+- Navbar.tsx: cartCount está hardcodeado en 2. Debe conectarse al estado real del carrito cuando se implemente Context API
+- CatalogPage.tsx: la paginación tiene UI pero la lógica de paginar los resultados no está implementada (muestra todos los productos en una página)
+- Hero.tsx: los stats (500+ productos, 50+ marcas) son valores hardcodeados/falsos. En el futuro podrían venir de Supabase con un count()
+- ProductPage.tsx: el tab "Reseñas" muestra un placeholder. No existe tabla de reseñas en Supabase todavía
+- hooks/index.ts: useProduct no está re-exportado en el barrel (index.ts). Importar directo funciona, pero rompe consistencia
+- App.css: contiene estilos del template de Vite que nunca se usan. Se puede borrar sin afectar nada
+- Precios en CLP: el formateo de precio (es-CL, CLP) está inline en ProductPage. Debería ser una función utilitaria en src/utils/formatters.ts para reutilizarlo en ProductCard y CatalogPage
 
 ***Decisiones tomadas
 Decisión	Alternativa descartada	Motivo
@@ -289,19 +329,24 @@ Tailwind v4 + plugin Vite	Tailwind v3 con config.js	v4 es la versión actual, in
 Diseño dark tech (#080808 + #00D4FF)	Neo-brutalist	Más coherente visualmente, mejor para portfolio
 Query params para filtros de catálogo	Estado global	Permite compartir URLs filtradas, más correcto para SEO
 
-***Próximos pasos inmediatos
+***Próximos pasos inmediatos (ordenados por prioridad)
 [x] Crear repositorio en GitHub llamado nubeo
 [x] Definir esquema de base de datos en Supabase (tablas: categories, products, orders, order_items)
 [x] Crear tipos TypeScript en src/types/ para cada entidad
 [x] Crear los repositorios base en src/repositories/
 [x] Crear custom hooks en src/hooks/ que usen los repositorios (useProducts, useCategories)
 [x] Generar UI base de la landing y catálogo
-[ ] URGENTE: Conectar Categories.tsx con useCategories (reemplazar mock data)
-[ ] URGENTE: Conectar FeaturedProducts.tsx con useProducts (reemplazar mock data)
-[ ] URGENTE: Conectar CatalogPage.tsx con useProducts (reemplazar mock data + habilitar filtros reales)
-[ ] Insertar datos reales en Supabase (al menos 4 categorías + 10-15 productos de prueba)
-[ ] Implementar ProductPage (detalle de producto con useProducts por slug)
-[ ] Implementar carrito con Context API + localStorage (src/features/cart/)
-[ ] Implementar auth con Supabase (LoginPage, RegisterPage, src/features/auth/)
-[ ] Crear ordersRepository.ts
-[ ] Deploy a Vercel
+[x] Conectar Categories.tsx, FeaturedProducts.tsx y CatalogPage.tsx con datos reales de Supabase
+[x] Implementar ProductPage con detalle de producto real (useProduct por slug)
+[x] Insertar datos reales en Supabase (4 categorías + 12 productos con SQL seed) ✅
+[ ] 1. Implementar carrito con Context API + localStorage (src/features/cart/)
+     → CartContext: agregar, quitar, modificar cantidad, persistir en localStorage
+     → Conectar Navbar.tsx para mostrar el contador real
+     → Implementar CartPage.tsx
+[ ] 3. Implementar auth con Supabase (LoginPage, RegisterPage, src/features/auth/)
+     → AuthContext con Supabase Auth
+     → Rutas protegidas (PrivateRoute component)
+[ ] 4. Crear ordersRepository.ts y implementar checkout básico
+[ ] 5. Integrar Stripe (modo test) en CheckoutPage
+[ ] 6. Deploy a Vercel
+[ ] 7. Implementar panel admin (src/features/admin/) — CRUD de productos y categorías
