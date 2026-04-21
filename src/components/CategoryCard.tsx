@@ -2,7 +2,7 @@ interface CategoryCardProps {
   name: string;
   slug: string;
   icon: React.ReactNode;
-  productCount: number;
+  productCount?: number;
   active?: boolean;
   visible?: boolean;
 }
@@ -32,10 +32,12 @@ export function CategoryCard({ name, slug, icon, productCount, active, visible =
         {name}
       </h3>
 
-      {/* Product count */}
-      <span className="text-xs text-[#444444]">
-        {productCount} productos
-      </span>
+      {/* Product count — solo se muestra si el dato está disponible */}
+      {productCount !== undefined && (
+        <span className="text-xs text-[#444444]">
+          {productCount} productos
+        </span>
+      )}
 
       {/* Arrow indicator */}
       <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

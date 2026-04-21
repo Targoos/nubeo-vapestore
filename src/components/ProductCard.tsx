@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 interface ProductCardProps {
   slug: string;
   name: string;
-  brand: string;
+  brand?: string;
   price: number;
   image?: string;
   visible?: boolean;
@@ -35,10 +35,12 @@ export function ProductCard({ slug, name, brand, price, visible = true }: Produc
 
       {/* Product info */}
       <div className="p-4">
-        {/* Brand */}
-        <span className="text-xs text-[#444444] uppercase tracking-[0.1em]">
-          {brand}
-        </span>
+        {/* Marca o categoría — solo se muestra si el dato está disponible */}
+        {brand && (
+          <span className="text-xs text-[#444444] uppercase tracking-[0.1em]">
+            {brand}
+          </span>
+        )}
 
         {/* Name */}
         <h3 className="mt-1 text-sm font-medium text-white line-clamp-2">
