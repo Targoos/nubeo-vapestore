@@ -70,10 +70,10 @@ export function ProductPage() {
   const images = product?.images?.length
     ? product.images
     : [
-        "https://placehold.co/600x600/0a0a0a/444444?text=Producto",
-        "https://placehold.co/600x600/0a0a0a/444444?text=Vista+2",
-        "https://placehold.co/600x600/0a0a0a/444444?text=Vista+3",
-        "https://placehold.co/600x600/0a0a0a/444444?text=Vista+4",
+        "https://placehold.co/600x600/0d0d0d/444444?text=Producto",
+        "https://placehold.co/600x600/0d0d0d/444444?text=Vista+2",
+        "https://placehold.co/600x600/0d0d0d/444444?text=Vista+3",
+        "https://placehold.co/600x600/0d0d0d/444444?text=Vista+4",
       ];
 
   const isVisible = (key: string) => visibleElements.includes(key);
@@ -221,7 +221,7 @@ export function ProductPage() {
                 <div
                   className="relative aspect-square mb-4 overflow-hidden"
                   style={{
-                    backgroundColor: designTokens.colors.background.elevated,
+                    backgroundColor: designTokens.colors.background.surface,
                     borderRadius: designTokens.borders.radius.lg,
                     border: `${designTokens.borders.width.default} solid ${designTokens.colors.border.default}`,
                   }}
@@ -242,7 +242,7 @@ export function ProductPage() {
                       onClick={() => setSelectedImage(idx)}
                       className="aspect-square overflow-hidden transition-all"
                       style={{
-                        backgroundColor: designTokens.colors.background.elevated,
+                        backgroundColor: designTokens.colors.background.surface,
                         borderRadius: designTokens.borders.radius.default,
                         border: `${designTokens.borders.width.default} solid ${
                           selectedImage === idx
@@ -401,19 +401,17 @@ export function ProductPage() {
                 <button
                   className="w-full py-4 text-xs font-semibold uppercase flex items-center justify-center gap-2 transition-all mb-8"
                   style={{
-                    backgroundColor: designTokens.buttons.secondary.background,
-                    color: designTokens.buttons.secondary.text,
-                    border: designTokens.buttons.secondary.border,
+                    backgroundColor: "transparent",
+                    color: designTokens.colors.foreground.primary,
+                    border: `1px solid ${designTokens.colors.foreground.primary}`,
                     letterSpacing: designTokens.buttons.secondary.letterSpacing,
                     borderRadius: designTokens.buttons.secondary.borderRadius,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = designTokens.buttons.secondary.backgroundHover;
-                    e.currentTarget.style.border = designTokens.buttons.secondary.borderHover;
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = designTokens.buttons.secondary.background;
-                    e.currentTarget.style.border = designTokens.buttons.secondary.border;
+                    e.currentTarget.style.backgroundColor = "transparent";
                   }}
                 >
                   <HeartIcon />
@@ -623,7 +621,7 @@ function TabButton({
       style={{
         color: active
           ? designTokens.colors.accent.primary
-          : designTokens.colors.foreground.secondary,
+          : designTokens.colors.foreground.primary,
         letterSpacing: designTokens.typography.letterSpacing.wider,
       }}
     >
