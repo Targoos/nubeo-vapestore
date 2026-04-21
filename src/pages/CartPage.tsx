@@ -1,17 +1,321 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 
+// Mock cart data
+const mockCartItems = [
+  {
+    id: "1",
+    name: "Vaporesso XROS 3 Mini",
+    brand: "Vaporesso",
+    price: 32990,
+    quantity: 1,
+    image: null,
+  },
+  {
+    id: "2",
+    name: "SMOK Nord 5 Kit Completo",
+    brand: "SMOK",
+    price: 45990,
+    quantity: 2,
+    image: null,
+  },
+  {
+    id: "3",
+    name: "Resistencias GTX 0.8ohm (Pack x5)",
+    brand: "Vaporesso",
+    price: 12990,
+    quantity: 1,
+    image: null,
+  },
+];
+
+interface CartItem {
+  id: string;
+  name: string;
+  brand: string;
+  price: number;
+  quantity: number;
+  image: string | null;
+}
+
 export function CartPage() {
+  const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
+
+  const updateQuantity = (id: string, delta: number) => {
+    setCartItems((items) =>
+      items.map((item) =>
+        item.id === id
+          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+          : item
+      )
+    );
+  };
+
+  const removeItem = (id: string) => {
+    setCartItems((items) => items.filter((item) => item.id !== id));
+  };
+
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <div className="min-h-screen bg-[#080808]">
       <Navbar />
-      <main className="pt-16 flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-[#444444] text-xs uppercase tracking-[0.2em] mb-4">En construcción</p>
-          <h1 className="text-4xl font-bold text-white uppercase tracking-tight">Carrito</h1>
+      <main className="pt-24 pb-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          {/* Page Title */}
+          <div className="animate-fade-in-up">
+            <h1 className="text-3xl font-bold text-white uppercase tracking-tight flex items-center gap-4">
+              MI CARRITO
+              {itemCount > 0 && (
+                <span className="px-3 py-1 text-sm font-medium bg-[#00D4FF] text-black rounded-full">
+                  {itemCount}
+                </span>
+              )}
+            </h1>
+          </div>
+
+          {cartItems.length === 0 ? (
+            /* Empty Cart State */
+            <div className="animate-fade-in-up delay-100 flex flex-col items-center justify-center py-24">
+              <div className="w-24 h-24 mb-8 text-[#444444]">
+                <EmptyCartIcon />
+              </div>
+              <h2 className="text-2xl font-bold text-white uppercase tracking-tight mb-4">
+                TU CARRITO ESTA VACIO
+              </h2>
+              <p className="text-[#444444] text-sm mb-8">
+                Agrega productos para comenzar tu compra
+              </p>
+              <Link
+                to="/catalogo"
+                className="px-8 py-3 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors"
+              >
+                VER PRODUCTOS
+              </Link>
+            </div>
+          ) : (
+            /* Cart with Items */
+            <div className="mt-10 flex flex-col lg:flex-row gap-10">
+              {/* Left Column - Cart Items */}
+              <div className="lg:w-[65%] space-y-4">
+                {cartItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="animate-fade-in-up bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-4 sm:p-6"
+                    style={{ animationDelay: `${(index + 1) * 100}ms` }}
+                  >
+                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                      {/* Product Image */}
+                      <div className="w-full sm:w-28 h-28 bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg flex items-center justify-center flex-shrink-0">
+                        <div className="w-12 h-16 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] rounded" />
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="flex-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                        <div className="flex-1">
+                          <span className="text-xs text-[#444444] uppercase tracking-[0.1em]">
+                            {item.brand}
+                          </span>
+                          <h3 className="mt-1 text-sm font-medium text-white">
+                            {item.name}
+                          </h3>
+                          <p className="mt-2 text-[#00D4FF] font-semibold">
+                            ${item.price.toLocaleString()}
+                          </p>
+                        </div>
+
+                        <div className="flex items-center justify-between sm:justify-end gap-6">
+                          {/* Quantity Controls */}
+                          <div className="flex items-center border border-[#1a1a1a] rounded-md">
+                            <button
+                              onClick={() => updateQuantity(item.id, -1)}
+                              className="w-9 h-9 flex items-center justify-center text-[#444444] hover:text-white transition-colors"
+                              aria-label="Disminuir cantidad"
+                            >
+                              <MinusIcon />
+                            </button>
+                            <span className="w-10 text-center text-white text-sm font-medium">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateQuantity(item.id, 1)}
+                              className="w-9 h-9 flex items-center justify-center text-[#444444] hover:text-white transition-colors"
+                              aria-label="Aumentar cantidad"
+                            >
+                              <PlusIcon />
+                            </button>
+                          </div>
+
+                          {/* Item Subtotal */}
+                          <div className="text-right min-w-[80px]">
+                            <span className="text-white font-semibold">
+                              ${(item.price * item.quantity).toLocaleString()}
+                            </span>
+                          </div>
+
+                          {/* Remove Button */}
+                          <button
+                            onClick={() => removeItem(item.id)}
+                            className="p-2 text-[#444444] hover:text-white transition-colors"
+                            aria-label="Eliminar producto"
+                          >
+                            <TrashIcon />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Right Column - Order Summary */}
+              <div className="lg:w-[35%]">
+                <div
+                  className="animate-fade-in-up delay-200 bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-6 sticky top-24"
+                >
+                  <h2 className="text-lg font-bold text-white uppercase tracking-tight mb-6">
+                    RESUMEN DEL PEDIDO
+                  </h2>
+
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#444444]">Subtotal</span>
+                      <span className="text-sm text-white">
+                        ${subtotal.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-[#444444]">Envio</span>
+                      <span className="text-sm text-[#444444]">A calcular</span>
+                    </div>
+                  </div>
+
+                  <div className="my-6 border-t border-[#1a1a1a]" />
+
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="text-lg font-bold text-white uppercase">
+                      Total
+                    </span>
+                    <span className="text-2xl font-bold text-[#00D4FF]">
+                      ${subtotal.toLocaleString()}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Link
+                      to="/checkout"
+                      className="w-full py-3 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors flex items-center justify-center"
+                    >
+                      PROCEDER AL PAGO
+                    </Link>
+                    <Link
+                      to="/catalogo"
+                      className="w-full py-3 bg-transparent text-white text-xs font-semibold uppercase tracking-[0.1em] rounded-md border border-white hover:bg-white/10 transition-colors flex items-center justify-center"
+                    >
+                      SEGUIR COMPRANDO
+                    </Link>
+                    <button
+                      onClick={clearCart}
+                      className="w-full py-3 text-[#444444] text-xs font-medium uppercase tracking-[0.1em] hover:text-red-500 transition-colors"
+                    >
+                      VACIAR CARRITO
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
     </div>
+  );
+}
+
+function EmptyCartIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="w-full h-full"
+    >
+      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <path d="M16 10a4 4 0 0 1-8 0" />
+    </svg>
+  );
+}
+
+function MinusIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <line x1="10" y1="11" x2="10" y2="17" />
+      <line x1="14" y1="11" x2="14" y2="17" />
+    </svg>
   );
 }
