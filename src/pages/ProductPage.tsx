@@ -2,58 +2,20 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-
-// Placeholder product data
-const PLACEHOLDER_PRODUCT = {
-  id: "1",
-  name: "GeekVape Aegis Legend 3",
-  brand: "GEEKVAPE",
-  price: 89990,
-  stock: 15,
-  shortDescription: "El mod más resistente del mercado con certificación IP68, pantalla TFT de 1.08 pulgadas y potencia de hasta 200W.",
-  description: `El GeekVape Aegis Legend 3 representa la evolución definitiva de la línea Aegis. 
-  
-Con certificación IP68, este mod es completamente resistente al agua, polvo y golpes, haciéndolo perfecto para cualquier situación. Su nuevo chipset AS-200 ofrece una respuesta de disparo ultrarrápida de 0.03 segundos.
-
-Características destacadas:
-- Potencia máxima de 200W
-- Pantalla TFT de 1.08 pulgadas a todo color
-- Batería dual 18650 (no incluidas)
-- Certificación IP68 (agua, polvo y golpes)
-- Modo bypass, VW, TC y curva personalizada
-- Puerto de carga USB-C de carga rápida`,
-  specs: [
-    { label: "Potencia", value: "5-200W" },
-    { label: "Resistencia", value: "0.05-3.0Ω" },
-    { label: "Pantalla", value: "1.08\" TFT" },
-    { label: "Batería", value: "Dual 18650" },
-    { label: "Certificación", value: "IP68" },
-    { label: "Conexión", value: "510" },
-  ],
-  images: [
-    "https://images.unsplash.com/photo-1560924739-3b4e1f8b8b8b?w=600&h=600&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&h=600&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&h=600&fit=crop&auto=format",
-    "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&h=600&fit=crop&auto=format",
-  ],
-  reviews: [
-    { id: 1, author: "Carlos M.", rating: 5, date: "2026-03-15", comment: "Excelente calidad, muy resistente. Lo mejor que he comprado." },
-    { id: 2, author: "María G.", rating: 4, date: "2026-03-10", comment: "Muy buen producto, aunque la batería podría durar un poco más." },
-    { id: 3, author: "Juan P.", rating: 5, date: "2026-02-28", comment: "Increíble diseño y rendimiento. Totalmente recomendado." },
-  ],
-};
+import { useProduct } from "../hooks/useProduct";
 
 type Tab = "descripcion" | "especificaciones" | "resenas";
 
+const FALLBACK_IMAGE = "https://placehold.co/600x600/0d0d0d/444444?text=Sin+imagen";
+
 export function ProductPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
+  const { data: product, loading, error } = useProduct(slug);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<Tab>("descripcion");
   const [isVisible, setIsVisible] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const product = PLACEHOLDER_PRODUCT;
 
   useEffect(() => {
     setIsVisible(true);
@@ -86,18 +48,70 @@ export function ProductPage() {
   };
 
   const handleQuantityChange = (delta: number) => {
+    if (!product) return;
     const newQuantity = quantity + delta;
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity);
     }
   };
 
+  // --- Estados de carga y error ---
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#080808]">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-[#00D4FF] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-sm text-[#444444] tracking-[0.1em] uppercase">
+              Cargando producto...
+            </p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-[#080808]">
+        <Navbar />
+        <div className="flex items-center justify-center min-h-[80vh]">
+          <div className="text-center max-w-sm">
+            <p className="text-4xl font-bold text-white mb-4">404</p>
+            <p className="text-sm text-[#444444] mb-8">
+              {error ?? "Este producto no existe o fue eliminado."}
+            </p>
+            <Link
+              to="/catalogo"
+              className="inline-block px-6 py-3 bg-[#00D4FF] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md"
+            >
+              Ver catálogo
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // A partir de aquí, product está garantizado como no-null
+
+  const images = product.images.length > 0 ? product.images : [FALLBACK_IMAGE];
+  const categoryName = product.category?.name ?? "Catálogo";
+  const categorySlug = product.category?.slug ?? "";
+  const categoryLink = categorySlug
+    ? `/catalogo?categoria=${categorySlug}`
+    : "/catalogo";
+
   return (
     <div className="min-h-screen bg-[#080808]">
       <Navbar />
       <main className="pt-16" ref={contentRef}>
         {/* Breadcrumb */}
-        <div 
+        <div
           className={`max-w-7xl mx-auto px-6 lg:px-8 py-6 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
           style={{ animationDelay: "0ms" }}
         >
@@ -106,8 +120,8 @@ export function ProductPage() {
               Inicio
             </Link>
             <ChevronRightIcon />
-            <Link to="/catalogo?categoria=equipos" className="text-[#444444] hover:text-white transition-colors">
-              Equipos
+            <Link to={categoryLink} className="text-[#444444] hover:text-white transition-colors">
+              {categoryName}
             </Link>
             <ChevronRightIcon />
             <span className="text-[#00D4FF]">{product.name}</span>
@@ -118,51 +132,53 @@ export function ProductPage() {
         <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-24">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
             {/* Left Column - Image Gallery (60%) */}
-            <div 
+            <div
               className={`lg:col-span-3 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
               style={{ animationDelay: "100ms" }}
             >
               {/* Main Image */}
               <div className="bg-[#0d0d0d] rounded-lg overflow-hidden aspect-square flex items-center justify-center">
                 <img
-                  src={product.images[selectedImage]}
+                  src={images[selectedImage]}
                   alt={product.name}
                   className="w-full h-full object-cover"
                   crossOrigin="anonymous"
                 />
               </div>
 
-              {/* Thumbnails */}
-              <div className="grid grid-cols-4 gap-4 mt-4">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`aspect-square rounded-md overflow-hidden border transition-all duration-200 ${
-                      selectedImage === index
-                        ? "border-[#00D4FF]"
-                        : "border-[#1a1a1a] hover:border-[rgba(0,212,255,0.5)]"
-                    }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`${product.name} vista ${index + 1}`}
-                      className="w-full h-full object-cover"
-                      crossOrigin="anonymous"
-                    />
-                  </button>
-                ))}
-              </div>
+              {/* Thumbnails — solo si hay más de una imagen */}
+              {images.length > 1 && (
+                <div className="grid grid-cols-4 gap-4 mt-4">
+                  {images.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`aspect-square rounded-md overflow-hidden border transition-all duration-200 ${
+                        selectedImage === index
+                          ? "border-[#00D4FF]"
+                          : "border-[#1a1a1a] hover:border-[rgba(0,212,255,0.5)]"
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`${product.name} vista ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        crossOrigin="anonymous"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Right Column - Product Info (40%) */}
-            <div 
+            <div
               className={`lg:col-span-2 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
               style={{ animationDelay: "200ms" }}
             >
-              {/* Brand */}
+              {/* Categoría como etiqueta de marca */}
               <span className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase">
-                {product.brand}
+                {categoryName}
               </span>
 
               {/* Product Name */}
@@ -177,69 +193,65 @@ export function ProductPage() {
 
               {/* Stock Badge */}
               <div className="mt-4">
-                <span className="inline-flex items-center px-3 py-1 text-xs font-medium tracking-[0.1em] uppercase bg-[rgba(0,255,0,0.1)] text-[#00ff88] border border-[rgba(0,255,0,0.3)] rounded-full">
-                  <span className="w-1.5 h-1.5 bg-[#00ff88] rounded-full mr-2"></span>
-                  En Stock
-                </span>
+                {product.stock > 0 ? (
+                  <span className="inline-flex items-center px-3 py-1 text-xs font-medium tracking-[0.1em] uppercase bg-[rgba(0,255,0,0.1)] text-[#00ff88] border border-[rgba(0,255,0,0.3)] rounded-full">
+                    <span className="w-1.5 h-1.5 bg-[#00ff88] rounded-full mr-2"></span>
+                    En Stock
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-3 py-1 text-xs font-medium tracking-[0.1em] uppercase bg-[rgba(255,0,0,0.1)] text-red-400 border border-[rgba(255,0,0,0.3)] rounded-full">
+                    <span className="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></span>
+                    Sin Stock
+                  </span>
+                )}
               </div>
 
-              {/* Short Description */}
-              <p className="mt-6 text-sm text-[#444444] leading-relaxed">
-                {product.shortDescription}
-              </p>
+              {/* Descripción */}
+              {product.description && (
+                <p className="mt-6 text-sm text-[#444444] leading-relaxed">
+                  {product.description}
+                </p>
+              )}
 
-              {/* Quantity Selector */}
-              <div className="mt-8">
-                <label className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase">
-                  Cantidad
-                </label>
-                <div className="mt-2 flex items-center">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    disabled={quantity <= 1}
-                    className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-l-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <MinusIcon />
-                  </button>
-                  <div className="w-16 h-12 flex items-center justify-center border-t border-b border-[#1a1a1a] text-white font-medium">
-                    {quantity}
+              {/* Quantity Selector — solo si hay stock */}
+              {product.stock > 0 && (
+                <div className="mt-8">
+                  <label className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase">
+                    Cantidad
+                  </label>
+                  <div className="mt-2 flex items-center">
+                    <button
+                      onClick={() => handleQuantityChange(-1)}
+                      disabled={quantity <= 1}
+                      className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-l-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <MinusIcon />
+                    </button>
+                    <div className="w-16 h-12 flex items-center justify-center border-t border-b border-[#1a1a1a] text-white font-medium">
+                      {quantity}
+                    </div>
+                    <button
+                      onClick={() => handleQuantityChange(1)}
+                      disabled={quantity >= product.stock}
+                      className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-r-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <PlusIcon />
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    disabled={quantity >= product.stock}
-                    className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-r-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <PlusIcon />
-                  </button>
                 </div>
-              </div>
+              )}
 
               {/* Action Buttons */}
               <div className="mt-8 space-y-4">
-                <button className="w-full py-4 bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors">
+                <button
+                  disabled={product.stock === 0}
+                  className="w-full py-4 bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                >
                   Agregar al Carrito
                 </button>
                 <button className="w-full py-4 bg-transparent border border-white hover:bg-[rgba(255,255,255,0.05)] text-white text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors">
                   Agregar a Favoritos
                 </button>
-              </div>
-
-              {/* Divider */}
-              <div className="mt-8 border-t border-[#1a1a1a]"></div>
-
-              {/* Specs Table */}
-              <div className="mt-8">
-                <h3 className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase mb-4">
-                  Especificaciones
-                </h3>
-                <dl className="space-y-3">
-                  {product.specs.slice(0, 4).map((spec) => (
-                    <div key={spec.label} className="flex justify-between">
-                      <dt className="text-sm text-[#444444]">{spec.label}</dt>
-                      <dd className="text-sm text-white font-medium">{spec.value}</dd>
-                    </div>
-                  ))}
-                </dl>
               </div>
             </div>
           </div>
@@ -254,19 +266,13 @@ export function ProductPage() {
                 active={activeTab === "descripcion"}
                 onClick={() => setActiveTab("descripcion")}
               >
-                Descripcion
-              </TabButton>
-              <TabButton
-                active={activeTab === "especificaciones"}
-                onClick={() => setActiveTab("especificaciones")}
-              >
-                Especificaciones
+                Descripción
               </TabButton>
               <TabButton
                 active={activeTab === "resenas"}
                 onClick={() => setActiveTab("resenas")}
               >
-                Resenas
+                Reseñas
               </TabButton>
             </div>
 
@@ -274,53 +280,23 @@ export function ProductPage() {
             <div className="py-12 animate-on-scroll">
               {activeTab === "descripcion" && (
                 <div className="max-w-3xl">
-                  <p className="text-sm text-[#444444] leading-relaxed whitespace-pre-line">
-                    {product.description}
-                  </p>
-                </div>
-              )}
-
-              {activeTab === "especificaciones" && (
-                <div className="max-w-xl">
-                  <dl className="space-y-4">
-                    {product.specs.map((spec) => (
-                      <div
-                        key={spec.label}
-                        className="flex justify-between py-3 border-b border-[#1a1a1a]"
-                      >
-                        <dt className="text-sm text-[#444444]">{spec.label}</dt>
-                        <dd className="text-sm text-white font-medium">{spec.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
+                  {product.description ? (
+                    <p className="text-sm text-[#444444] leading-relaxed whitespace-pre-line">
+                      {product.description}
+                    </p>
+                  ) : (
+                    <p className="text-sm text-[#444444]">
+                      Este producto aún no tiene descripción detallada.
+                    </p>
+                  )}
                 </div>
               )}
 
               {activeTab === "resenas" && (
-                <div className="max-w-2xl space-y-8">
-                  {product.reviews.map((review) => (
-                    <div key={review.id} className="pb-8 border-b border-[#1a1a1a] last:border-0">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm font-medium text-white">
-                            {review.author}
-                          </span>
-                          <div className="flex gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <StarIcon
-                                key={i}
-                                filled={i < review.rating}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-xs text-[#444444]">{review.date}</span>
-                      </div>
-                      <p className="text-sm text-[#444444] leading-relaxed">
-                        {review.comment}
-                      </p>
-                    </div>
-                  ))}
+                <div className="max-w-2xl">
+                  <p className="text-sm text-[#444444]">
+                    Aún no hay reseñas para este producto. ¡Sé el primero en opinar!
+                  </p>
                 </div>
               )}
             </div>
@@ -405,23 +381,6 @@ function PlusIcon() {
     >
       <line x1="12" y1="5" x2="12" y2="19" />
       <line x1="5" y1="12" x2="19" y2="12" />
-    </svg>
-  );
-}
-
-function StarIcon({ filled }: { filled: boolean }) {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill={filled ? "#00D4FF" : "none"}
-      stroke="#00D4FF"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
     </svg>
   );
 }

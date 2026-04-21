@@ -1,21 +1,25 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/ProductCard";
 
 const featuredProducts = [
   {
     id: 1,
+    slug: "thelema-quest-200w",
     name: "Lost Vape Thelema Quest 200W",
     brand: "Lost Vape",
     price: 89990,
   },
   {
     id: 2,
+    slug: "aegis-legend-2",
     name: "GeekVape Aegis Legend 2",
     brand: "GeekVape",
     price: 74990,
   },
   {
     id: 3,
+    slug: "drag-x-plus-pro",
     name: "VooPoo Drag X Plus Pro",
     brand: "VooPoo",
     price: 64990,
@@ -62,8 +66,8 @@ export function FeaturedProducts() {
               Más Vendidos
             </h2>
           </div>
-          <a
-            href="/productos"
+          <Link
+            to="/catalogo"
             className="hidden sm:flex items-center gap-2 text-sm text-[#444444] hover:text-white transition-colors"
           >
             <span className="uppercase tracking-[0.1em]">Ver Todo</span>
@@ -79,7 +83,7 @@ export function FeaturedProducts() {
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </a>
+          </Link>
         </div>
 
         {/* Products grid */}
@@ -87,6 +91,7 @@ export function FeaturedProducts() {
           {featuredProducts.map((product, index) => (
             <ProductCard
               key={product.id}
+              slug={product.slug}
               name={product.name}
               brand={product.brand}
               price={product.price}
@@ -97,8 +102,8 @@ export function FeaturedProducts() {
 
         {/* Mobile view all link */}
         <div className="mt-8 sm:hidden text-center">
-          <a
-            href="/productos"
+          <Link
+            to="/catalogo"
             className="inline-flex items-center gap-2 text-sm text-[#00D4FF]"
           >
             <span className="uppercase tracking-[0.1em]">Ver Todos los Productos</span>
@@ -114,7 +119,7 @@ export function FeaturedProducts() {
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

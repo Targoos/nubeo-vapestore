@@ -6,21 +6,21 @@ import { ProductCard } from "../components/ProductCard";
 
 // Mock product data
 const PRODUCTS = [
-  { id: 1, name: "Aegis Legend 2 Kit", brand: "GeekVape", price: 89900, category: "Equipos", inStock: true },
-  { id: 2, name: "Centaurus M200 Mod", brand: "Lost Vape", price: 125000, category: "Equipos", inStock: true },
-  { id: 3, name: "LUXE X Pro Kit", brand: "Vaporesso", price: 65000, category: "Equipos", inStock: false },
-  { id: 4, name: "Drag 4 Kit", brand: "VooPoo", price: 79900, category: "Equipos", inStock: true },
-  { id: 5, name: "Zeus X RTA", brand: "GeekVape", price: 45000, category: "Atomizadores", inStock: true },
-  { id: 6, name: "Destiny 2 RTA", brand: "Hellvape", price: 52000, category: "Atomizadores", inStock: true },
-  { id: 7, name: "XROS 4 Pod", brand: "Vaporesso", price: 35000, category: "Equipos", inStock: true },
-  { id: 8, name: "Argus P2 Kit", brand: "VooPoo", price: 42000, category: "Equipos", inStock: false },
-  { id: 9, name: "Dead Rabbit V3 RDA", brand: "Hellvape", price: 38000, category: "Atomizadores", inStock: true },
-  { id: 10, name: "Thelema Quest Mod", brand: "Lost Vape", price: 95000, category: "Equipos", inStock: true },
-  { id: 11, name: "Resistencias GTi Mesh", brand: "Vaporesso", price: 15000, category: "Repuestos", inStock: true },
-  { id: 12, name: "Algodón Orgánico Premium", brand: "GeekVape", price: 8500, category: "Repuestos", inStock: true },
-  { id: 13, name: "Esencia Mango Ice 60ml", brand: "VooPoo", price: 22000, category: "Esencias", inStock: true },
-  { id: 14, name: "Esencia Strawberry Cream 30ml", brand: "Lost Vape", price: 18000, category: "Esencias", inStock: false },
-  { id: 15, name: "Z Series Coils 5-Pack", brand: "GeekVape", price: 19500, category: "Repuestos", inStock: true },
+  { id: 1, slug: "aegis-legend-2-kit", name: "Aegis Legend 2 Kit", brand: "GeekVape", price: 89900, category: "Equipos", inStock: true },
+  { id: 2, slug: "centaurus-m200-mod", name: "Centaurus M200 Mod", brand: "Lost Vape", price: 125000, category: "Equipos", inStock: true },
+  { id: 3, slug: "luxe-x-pro-kit", name: "LUXE X Pro Kit", brand: "Vaporesso", price: 65000, category: "Equipos", inStock: false },
+  { id: 4, slug: "drag-4-kit", name: "Drag 4 Kit", brand: "VooPoo", price: 79900, category: "Equipos", inStock: true },
+  { id: 5, slug: "zeus-x-rta", name: "Zeus X RTA", brand: "GeekVape", price: 45000, category: "Atomizadores", inStock: true },
+  { id: 6, slug: "destiny-2-rta", name: "Destiny 2 RTA", brand: "Hellvape", price: 52000, category: "Atomizadores", inStock: true },
+  { id: 7, slug: "xros-4-pod", name: "XROS 4 Pod", brand: "Vaporesso", price: 35000, category: "Equipos", inStock: true },
+  { id: 8, slug: "argus-p2-kit", name: "Argus P2 Kit", brand: "VooPoo", price: 42000, category: "Equipos", inStock: false },
+  { id: 9, slug: "dead-rabbit-v3-rda", name: "Dead Rabbit V3 RDA", brand: "Hellvape", price: 38000, category: "Atomizadores", inStock: true },
+  { id: 10, slug: "thelema-quest-mod", name: "Thelema Quest Mod", brand: "Lost Vape", price: 95000, category: "Equipos", inStock: true },
+  { id: 11, slug: "resistencias-gti-mesh", name: "Resistencias GTi Mesh", brand: "Vaporesso", price: 15000, category: "Repuestos", inStock: true },
+  { id: 12, slug: "algodon-organico-premium", name: "Algodón Orgánico Premium", brand: "GeekVape", price: 8500, category: "Repuestos", inStock: true },
+  { id: 13, slug: "esencia-mango-ice-60ml", name: "Esencia Mango Ice 60ml", brand: "VooPoo", price: 22000, category: "Esencias", inStock: true },
+  { id: 14, slug: "esencia-strawberry-cream-30ml", name: "Esencia Strawberry Cream 30ml", brand: "Lost Vape", price: 18000, category: "Esencias", inStock: false },
+  { id: 15, slug: "z-series-coils-5-pack", name: "Z Series Coils 5-Pack", brand: "GeekVape", price: 19500, category: "Repuestos", inStock: true },
 ];
 
 const CATEGORIES = ["Equipos", "Atomizadores", "Repuestos", "Esencias"];
@@ -224,6 +224,7 @@ export function CatalogPage() {
                     data-index={index}
                   >
                     <ProductCard
+                      slug={product.slug}
                       name={product.name}
                       brand={product.brand}
                       price={product.price}
