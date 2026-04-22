@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { useProduct } from "../hooks/useProduct";
+import { useCart } from "../features/cart/CartContext";
 
 type Tab = "descripcion" | "especificaciones" | "resenas";
 
@@ -11,6 +12,7 @@ const FALLBACK_IMAGE = "https://placehold.co/600x600/0d0d0d/444444?text=Sin+imag
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data: product, loading, error } = useProduct(slug);
+  const { addToCart } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<Tab>("descripcion");
@@ -245,7 +247,8 @@ export function ProductPage() {
               <div className="mt-8 space-y-4">
                 <button
                   disabled={product.stock === 0}
-                  className="w-full py-4 bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                  onClick={() => addToCart(product, quantity)}
+                  className="w-full py-4 bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   Agregar al Carrito
                 </button>

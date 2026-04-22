@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ProductCard } from "../../components/ProductCard";
 import { useProducts } from "../../hooks/useProducts";
+import { useCart } from "../cart/CartContext";
 
 export function FeaturedProducts() {
-  // Pedimos solo productos activos. Tomamos los 3 primeros para esta sección.
-  // El repositorio ya los ordena por created_at DESC, así que son los más nuevos.
   const { data, loading, error } = useProducts({ onlyActive: true });
+  const { addToCart } = useCart();
   const featured = data.slice(0, 3);
 
   const [visibleCards, setVisibleCards] = useState<number[]>([]);
@@ -107,6 +107,7 @@ export function FeaturedProducts() {
                 brand={product.brand ?? undefined}
                 price={product.price}
                 visible={visibleCards.includes(index)}
+                onAddToCart={() => addToCart(product, 1)}
               />
             ))}
           </div>

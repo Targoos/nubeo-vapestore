@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { useCart } from "../features/cart/CartContext";
 
 export function Navbar() {
-  const [cartCount] = useState(2);
+  const { totalItems: cartCount } = useCart();
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const currentCategoria = searchParams.get("categoria");
@@ -30,7 +30,8 @@ export function Navbar() {
           </div>
 
           {/* Cart - right */}
-          <button
+          <Link
+            to="/cart"
             className="relative flex items-center gap-2 px-4 py-2 bg-transparent text-white border border-[#00D4FF] rounded-md hover:bg-[#00D4FF]/10 transition-colors duration-200"
             aria-label="Carrito de compras"
           >
@@ -38,7 +39,7 @@ export function Navbar() {
             <span className="text-xs font-medium tracking-wider text-[#00D4FF]">
               {cartCount}
             </span>
-          </button>
+          </Link>
 
           {/* Mobile menu button */}
           <button

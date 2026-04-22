@@ -255,6 +255,34 @@ Conceptos aprendidos en sesión 5:
 - useMemo para derivar datos: calcular las marcas disponibles sin re-renderizar innecesariamente
 - Skeleton loading: mostrar placeholders con la forma del contenido real mientras carga
 
+Sesión 6 — Carrito con Context API y localStorage
+Estado: completada (2026-04-21)
+Lo que se hizo:
+- src/features/cart/CartContext.tsx CREADO — núcleo del carrito:
+  - Interfaz CartItem (id, name, brand, price, quantity, image)
+  - CartProvider: estado global del carrito con useState + useEffect para sincronizar localStorage
+  - addToCart(product, quantity): suma cantidad si el producto ya existe, agrega si es nuevo
+  - removeFromCart(id), updateQuantity(id, delta), clearCart()
+  - totalItems y totalPrice: valores derivados calculados automáticamente
+  - useCart(): hook con error explícito si se usa fuera del Provider
+- src/main.tsx MODIFICADO — app envuelta con <CartProvider> en el nivel más alto
+- src/pages/CartPage.tsx MODIFICADO — eliminado mock y useState local, usa useCart()
+- src/pages/ProductPage.tsx MODIFICADO — botón "Agregar al Carrito" conectado a addToCart(product, quantity)
+- src/components/Navbar.tsx MODIFICADO — cartCount hardcodeado reemplazado por totalItems de useCart(); botón carrito convertido en Link a /cart
+- src/components/ProductCard.tsx MODIFICADO — prop onAddToCart añadido; botón "AGREGAR" usa e.stopPropagation() para no navegar al producto; cursor-pointer agregado
+- src/features/catalog/FeaturedProducts.tsx MODIFICADO — pasa onAddToCart={() => addToCart(product, 1)} a ProductCard
+- src/pages/CatalogPage.tsx MODIFICADO — pasa onAddToCart={() => addToCart(product, 1)} a ProductCard
+- URL del carrito cambiada de /carrito a /cart en App.tsx y Navbar.tsx
+
+Conceptos aprendidos en sesión 6:
+- Context API vs Redux: para un carrito en portfolio, Context API es suficiente sin boilerplate extra
+- Provider pattern: componente que envuelve la app y pone datos disponibles para todos sus hijos
+- useState con función inicializadora: () => loadCart() se ejecuta solo una vez vs loadCart() que corre en cada render
+- useEffect con dependencia [items]: sincronizar estado a localStorage después de cada cambio
+- useCallback: evitar recrear funciones en cada render cuando se pasan por contexto
+- e.stopPropagation() vs e.preventDefault(): stopPropagation detiene la burbuja de eventos (necesario dentro de <Link>); preventDefault cancela la acción nativa del browser
+- Prop callback onAddToCart: patrón para que un componente hijo ejecute lógica definida por el padre
+
 Commits realizados
 Commit	Descripción	Sesión
 1b32321	feat: build neo-brutalist ecommerce homepage	4
@@ -268,10 +296,12 @@ d5ede8e	feat: implement full routing structure and update navigation	4
 5fe5891	feat: implement ProductPage component with design tokens	5
 cbb986e	feat: implement product slug-based navigation and add useProduct hook	5
 7088781	feat: integrate Supabase data for categories and products	5
+e443101	feat: create CartPage component with design specs	6
+(sin commit)	feat: implement CartContext + connect cart to all components	6
 
 ***Estado actual del código (2026-04-21)
 
-COMPLETADO y con datos reales de Supabase:
+COMPLETADO y funcionando:
 - src/lib/supabase.ts — cliente Supabase listo
 - src/lib/designTokens.ts — tokens de diseño centralizados
 - src/types/ — todas las interfaces TypeScript (Category, Product, Order, OrderItem)
@@ -281,21 +311,23 @@ COMPLETADO y con datos reales de Supabase:
 - src/hooks/useProducts.ts — conectado y funcionando
 - src/hooks/useProduct.ts — hook para producto individual por slug
 - src/hooks/index.ts — barrel de hooks (nota: useProduct no está exportado aquí, se importa directo)
-- src/components/Navbar.tsx — navegación con React Router y query params
+- src/components/Navbar.tsx — navegación, query params, Link al /cart, contador real de items
 - src/components/Footer.tsx — footer completo
 - src/components/CategoryCard.tsx — tarjeta de categoría reutilizable
-- src/components/ProductCard.tsx — tarjeta de producto reutilizable
-- src/features/catalog/Hero.tsx — hero animado con IntersectionObserver (stats estáticos, OK)
-- src/features/catalog/Categories.tsx — conectada a Supabase con useCategories ✅
-- src/features/catalog/FeaturedProducts.tsx — conectada a Supabase con useProducts ✅
+- src/components/ProductCard.tsx — tarjeta de producto con botón AGREGAR funcional (onAddToCart)
+- src/features/catalog/Hero.tsx — hero animado
+- src/features/catalog/Categories.tsx — conectada a Supabase ✅
+- src/features/catalog/FeaturedProducts.tsx — conectada a Supabase, pasa onAddToCart ✅
+- src/features/cart/CartContext.tsx — Context API completo: addToCart, removeFromCart, updateQuantity, clearCart, localStorage ✅
 - src/pages/HomePage.tsx — landing page funcional con datos reales
-- src/pages/CatalogPage.tsx — catálogo con filtros y datos reales de Supabase ✅
-- src/pages/ProductPage.tsx — detalle de producto con datos reales de Supabase ✅
-- src/App.tsx — routing completo con todas las rutas definidas
+- src/pages/CatalogPage.tsx — catálogo con filtros, datos reales, pasa onAddToCart ✅
+- src/pages/ProductPage.tsx — detalle de producto con botón agregar al carrito funcional ✅
+- src/pages/CartPage.tsx — carrito funcional: lista items, controles de cantidad, vaciar, total ✅
+- src/main.tsx — CartProvider envuelve toda la app
+- src/App.tsx — routing completo
 
 VACÍOS (solo estructura de carpetas, sin código):
 - src/features/auth/ — Login y registro (pendiente)
-- src/features/cart/ — Carrito (pendiente)
 - src/features/checkout/ — Checkout con Stripe (pendiente)
 - src/features/orders/ — Historial de pedidos (pendiente)
 - src/features/admin/ — Panel admin (pendiente)
@@ -303,20 +335,20 @@ VACÍOS (solo estructura de carpetas, sin código):
 - src/repositories/ordersRepository.ts — no creado todavía
 
 PÁGINAS PLACEHOLDER ("En construcción"):
-- src/pages/CartPage.tsx
 - src/pages/CheckoutPage.tsx
 - src/pages/LoginPage.tsx
 - src/pages/RegisterPage.tsx
 - src/pages/AdminPage.tsx
 
 ***Deuda técnica (funciona pero hay que mejorar)
-- Navbar.tsx: cartCount está hardcodeado en 2. Debe conectarse al estado real del carrito cuando se implemente Context API
-- CatalogPage.tsx: la paginación tiene UI pero la lógica de paginar los resultados no está implementada (muestra todos los productos en una página)
-- Hero.tsx: los stats (500+ productos, 50+ marcas) son valores hardcodeados/falsos. En el futuro podrían venir de Supabase con un count()
+- CatalogPage.tsx: la paginación tiene UI pero la lógica no está implementada (muestra todos los productos en una página)
+- Hero.tsx: los stats (500+ productos, 50+ marcas) son valores hardcodeados
 - ProductPage.tsx: el tab "Reseñas" muestra un placeholder. No existe tabla de reseñas en Supabase todavía
-- hooks/index.ts: useProduct no está re-exportado en el barrel (index.ts). Importar directo funciona, pero rompe consistencia
-- App.css: contiene estilos del template de Vite que nunca se usan. Se puede borrar sin afectar nada
-- Precios en CLP: el formateo de precio (es-CL, CLP) está inline en ProductPage. Debería ser una función utilitaria en src/utils/formatters.ts para reutilizarlo en ProductCard y CatalogPage
+- hooks/index.ts: useProduct no está re-exportado en el barrel. Importar directo funciona pero rompe consistencia
+- App.css: contiene estilos del template de Vite que nunca se usan
+- Precios en CLP: formateo inline en ProductPage. Debería ser una función utilitaria en src/utils/formatters.ts
+- CartPage: no hay feedback visual al agregar (sin toast/notificación). El contador del Navbar cambia pero si el usuario está en otra pantalla no lo ve
+- ProductCard: imagen del producto no se muestra (usa un placeholder gráfico en vez de la imagen real de Supabase)
 
 ***Decisiones tomadas
 Decisión	Alternativa descartada	Motivo
@@ -339,14 +371,22 @@ Query params para filtros de catálogo	Estado global	Permite compartir URLs filt
 [x] Conectar Categories.tsx, FeaturedProducts.tsx y CatalogPage.tsx con datos reales de Supabase
 [x] Implementar ProductPage con detalle de producto real (useProduct por slug)
 [x] Insertar datos reales en Supabase (4 categorías + 12 productos con SQL seed) ✅
-[ ] 1. Implementar carrito con Context API + localStorage (src/features/cart/)
-     → CartContext: agregar, quitar, modificar cantidad, persistir en localStorage
-     → Conectar Navbar.tsx para mostrar el contador real
-     → Implementar CartPage.tsx
-[ ] 3. Implementar auth con Supabase (LoginPage, RegisterPage, src/features/auth/)
+[x] Implementar carrito con Context API + localStorage ✅
+     → CartContext.tsx con todas las operaciones
+     → Navbar conectado con contador real
+     → CartPage.tsx funcional con datos reales
+     → Botones "Agregar" conectados en ProductPage, CatalogPage, FeaturedProducts
+[ ] 1. Implementar auth con Supabase (LoginPage, RegisterPage, src/features/auth/)
      → AuthContext con Supabase Auth
      → Rutas protegidas (PrivateRoute component)
-[ ] 4. Crear ordersRepository.ts y implementar checkout básico
-[ ] 5. Integrar Stripe (modo test) en CheckoutPage
-[ ] 6. Deploy a Vercel
-[ ] 7. Implementar panel admin (src/features/admin/) — CRUD de productos y categorías
+     → Persistir sesión entre recargas
+[ ] 2. Crear ordersRepository.ts y flujo de checkout básico
+     → Guardar pedido en Supabase al confirmar compra
+     → Vaciar carrito tras pedido exitoso
+[ ] 3. Integrar Stripe (modo test) en CheckoutPage
+     → Formulario de tarjeta con Stripe Elements
+     → Webhook para confirmar pago
+[ ] 4. Deploy a Vercel
+     → Variables de entorno en Vercel dashboard
+     → Preview automático por PR
+[ ] 5. Implementar panel admin (src/features/admin/) — CRUD de productos y categorías

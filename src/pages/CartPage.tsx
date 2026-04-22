@@ -1,72 +1,17 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-
-// Mock cart data
-const mockCartItems = [
-  {
-    id: "1",
-    name: "Vaporesso XROS 3 Mini",
-    brand: "Vaporesso",
-    price: 32990,
-    quantity: 1,
-    image: null,
-  },
-  {
-    id: "2",
-    name: "SMOK Nord 5 Kit Completo",
-    brand: "SMOK",
-    price: 45990,
-    quantity: 2,
-    image: null,
-  },
-  {
-    id: "3",
-    name: "Resistencias GTX 0.8ohm (Pack x5)",
-    brand: "Vaporesso",
-    price: 12990,
-    quantity: 1,
-    image: null,
-  },
-];
-
-interface CartItem {
-  id: string;
-  name: string;
-  brand: string;
-  price: number;
-  quantity: number;
-  image: string | null;
-}
+import { useCart } from "../features/cart/CartContext";
 
 export function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(mockCartItems);
-
-  const updateQuantity = (id: string, delta: number) => {
-    setCartItems((items) =>
-      items.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const {
+    items: cartItems,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems: itemCount,
+    totalPrice: subtotal,
+  } = useCart();
 
   return (
     <div className="min-h-screen bg-[#080808]">
@@ -166,7 +111,7 @@ export function CartPage() {
 
                           {/* Remove Button */}
                           <button
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                             className="p-2 text-[#444444] hover:text-white transition-colors"
                             aria-label="Eliminar producto"
                           >

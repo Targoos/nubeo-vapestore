@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer";
 import { ProductCard } from "../components/ProductCard";
 import { useProducts } from "../hooks/useProducts";
 import { useCategories } from "../hooks/useCategories";
+import { useCart } from "../features/cart/CartContext";
 
 const SORT_OPTIONS = [
   { value: "relevance", label: "Relevancia" },
@@ -17,6 +18,7 @@ export function CatalogPage() {
   const [searchParams] = useSearchParams();
   const { data: allProducts, loading, error } = useProducts({ onlyActive: true });
   const { data: categories } = useCategories();
+  const { addToCart } = useCart();
 
   const [filters, setFilters] = useState({
     categories: [] as string[],
@@ -242,6 +244,7 @@ export function CatalogPage() {
                           brand={product.brand ?? undefined}
                           price={product.price}
                           visible={visibleProducts.includes(index)}
+                          onAddToCart={() => addToCart(product, 1)}
                         />
                       </div>
                     ))}

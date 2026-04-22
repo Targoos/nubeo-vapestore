@@ -7,9 +7,10 @@ interface ProductCardProps {
   price: number;
   image?: string;
   visible?: boolean;
+  onAddToCart?: () => void;
 }
 
-export function ProductCard({ slug, name, brand, price, visible = true }: ProductCardProps) {
+export function ProductCard({ slug, name, brand, price, visible = true, onAddToCart }: ProductCardProps) {
   return (
     <Link
       to={`/producto/${slug}`}
@@ -25,8 +26,8 @@ export function ProductCard({ slug, name, brand, price, visible = true }: Produc
         {/* Quick add overlay — stopPropagation para que el click no navegue */}
         <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 ease-out">
           <button
-            onClick={(e) => e.preventDefault()}
-            className="px-6 py-2.5 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors"
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAddToCart?.(); }}
+            className="px-6 py-2.5 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors cursor-pointer"
           >
             AGREGAR
           </button>
