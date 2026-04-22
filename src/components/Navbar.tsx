@@ -1,13 +1,21 @@
-import { Link, useLocation, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
+import { useAuth } from "../features/auth/AuthContext";
 
 export function Navbar() {
   const { totalItems: cartCount } = useCart();
+  const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentCategoria = searchParams.get("categoria");
 
   const isCatalogActive = location.pathname === "/catalogo" && !currentCategoria;
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#080808]/95 backdrop-blur-sm border-b border-[#1a1a1a]">
@@ -29,25 +37,53 @@ export function Navbar() {
             <NavLink to="/catalogo?categoria=esencias" active={currentCategoria === "esencias"}>ESENCIAS</NavLink>
           </div>
 
-          {/* Cart - right */}
-          <Link
-            to="/cart"
-            className="relative flex items-center gap-2 px-4 py-2 bg-transparent text-white border border-[#00D4FF] rounded-md hover:bg-[#00D4FF]/10 transition-colors duration-200"
-            aria-label="Carrito de compras"
-          >
-            <CartIcon />
-            <span className="text-xs font-medium tracking-wider text-[#00D4FF]">
-              {cartCount}
-            </span>
-          </Link>
+          {/* Right side: auth + cart */}
+          <div className="flex items-center gap-3">
+            {/* Autenticación: muestra MI CUENTA o INICIAR SESIÓN según el estado */}
+            {user ? (
+              <>
+                <Link
+                  to="/perfil"
+                  className="text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase hidden md:block"
+                >
+                  MI CUENTA
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-red-400 transition-colors uppercase hidden md:block"
+                >
+                  SALIR
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase hidden md:block"
+              >
+                INICIAR SESIÓN
+              </Link>
+            )}
 
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-2 text-[#444444] hover:text-white transition-colors"
-            aria-label="Menú"
-          >
-            <MenuIcon />
-          </button>
+            {/* Cart */}
+            <Link
+              to="/cart"
+              className="relative flex items-center gap-2 px-4 py-2 bg-transparent text-white border border-[#00D4FF] rounded-md hover:bg-[#00D4FF]/10 transition-colors duration-200"
+              aria-label="Carrito de compras"
+            >
+              <CartIcon />
+              <span className="text-xs font-medium tracking-wider text-[#00D4FF]">
+                {cartCount}
+              </span>
+            </Link>
+
+            {/* Mobile menu button */}
+            <button
+              className="md:hidden p-2 text-[#444444] hover:text-white transition-colors"
+              aria-label="Menú"
+            >
+              <MenuIcon />
+            </button>
+          </div>
         </div>
       </div>
     </nav>
