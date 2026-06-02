@@ -8,6 +8,7 @@ import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { AdminPage } from "./pages/AdminPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
 import { PrivateRoute } from "./features/auth/PrivateRoute";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
+        <Route path="/pedido-confirmado" element={<OrderConfirmationPage />} />
         <Route path="/perfil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
 
         {/* Rutas protegidas — PrivateRoute verifica el login antes de renderizar */}
