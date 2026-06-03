@@ -1,8 +1,15 @@
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
 import { useAuth } from "../features/auth/AuthContext";
 
 export function Navbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { totalItems: cartCount } = useCart();
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -10,7 +17,8 @@ export function Navbar() {
   const [searchParams] = useSearchParams();
   const currentCategoria = searchParams.get("categoria");
 
-  const isCatalogActive = location.pathname === "/catalogo" && !currentCategoria;
+  const isCatalogActive =
+    location.pathname === "/catalogo" && !currentCategoria;
 
   const handleSignOut = async () => {
     await signOut();
@@ -30,11 +38,33 @@ export function Navbar() {
 
           {/* Navigation Links - center */}
           <div className="hidden md:flex items-center gap-10">
-            <NavLink to="/catalogo" active={isCatalogActive}>CATÁLOGO</NavLink>
-            <NavLink to="/catalogo?categoria=equipos" active={currentCategoria === "equipos"}>EQUIPOS</NavLink>
-            <NavLink to="/catalogo?categoria=atomizadores" active={currentCategoria === "atomizadores"}>ATOMIZADORES</NavLink>
-            <NavLink to="/catalogo?categoria=repuestos" active={currentCategoria === "repuestos"}>REPUESTOS</NavLink>
-            <NavLink to="/catalogo?categoria=esencias" active={currentCategoria === "esencias"}>ESENCIAS</NavLink>
+            <NavLink to="/catalogo" active={isCatalogActive}>
+              CATÁLOGO
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=equipos"
+              active={currentCategoria === "equipos"}
+            >
+              EQUIPOS
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=atomizadores"
+              active={currentCategoria === "atomizadores"}
+            >
+              ATOMIZADORES
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=repuestos"
+              active={currentCategoria === "repuestos"}
+            >
+              REPUESTOS
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=esencias"
+              active={currentCategoria === "esencias"}
+            >
+              ESENCIAS
+            </NavLink>
           </div>
 
           {/* Right side: auth + cart */}
@@ -78,6 +108,7 @@ export function Navbar() {
 
             {/* Mobile menu button */}
             <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-[#444444] hover:text-white transition-colors"
               aria-label="Menú"
             >
@@ -86,6 +117,71 @@ export function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden absolute top-16 left-0 right-0 bg-[#080808] border-t border-[#1a1a1a] shadow-xl z-50">
+          <div className="px-6 py-4 space-y-3">
+            <NavLink to="/catalogo" active={isCatalogActive} mobile>
+              CATÁLOGO
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=equipos"
+              active={currentCategoria === "equipos"}
+              mobile
+            >
+              EQUIPOS
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=atomizadores"
+              active={currentCategoria === "atomizadores"}
+              mobile
+            >
+              ATOMIZADORES
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=repuestos"
+              active={currentCategoria === "repuestos"}
+              mobile
+            >
+              REPUESTOS
+            </NavLink>
+            <NavLink
+              to="/catalogo?categoria=esencias"
+              active={currentCategoria === "esencias"}
+              mobile
+            >
+              ESENCIAS
+            </NavLink>
+
+            <div className="pt-4 border-t border-[#1a1a1a] space-y-2">
+              {user ? (
+                <>
+                  <Link
+                    to="/perfil"
+                    className="block py-3 text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase"
+                  >
+                    MI CUENTA
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="block w-full text-left py-3 text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-red-400 transition-colors uppercase"
+                  >
+                    SALIR
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="block py-3 text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase"
+                >
+                  INICIAR SESIÓN
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }
@@ -94,15 +190,16 @@ interface NavLinkProps {
   to: string;
   children: React.ReactNode;
   active?: boolean;
+  mobile?: boolean;
 }
 
-function NavLink({ to, children, active }: NavLinkProps) {
+function NavLink({ to, children, active, mobile }: NavLinkProps) {
   return (
     <Link
       to={to}
       className={`nav-link text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-200 ${
-        active ? "text-[#00D4FF]" : "text-[#444444] hover:text-white"
-      }`}
+        mobile ? "block py-3" : ""
+      } ${active ? "text-[#00D4FF]" : "text-[#444444] hover:text-white"}`}
     >
       {children}
     </Link>

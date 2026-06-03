@@ -126,11 +126,15 @@ function CheckoutForm() {
       "create-payment-intent",
       {
         body: {
-          amount: totalPrice,     // monto en CLP (zero-decimal, no multiplicar)
+          amount: totalPrice, // monto en CLP (zero-decimal, no multiplicar)
           currency: "clp",
-          items: items.map((i) => ({ id: i.id, name: i.name, quantity: i.quantity })),
+          items: items.map((i) => ({
+            id: i.id,
+            name: i.name,
+            quantity: i.quantity,
+          })),
         },
-      }
+      },
     );
 
     if (fnError || !data?.clientSecret) {
@@ -182,13 +186,13 @@ function CheckoutForm() {
           items,
         });
 
-         // ── PASO 4: Limpiar carrito y redirigir ─────────────────────────────
-      clearCart();
-      // Pasamos el ID del pedido via navigation state para mostrarlo en la
-      // página de confirmación. useLocation() lo lee del otro lado.
-      navigate("/pedido-confirmado", {
-        state: { orderId: order.id },
-      });
+        // ── PASO 4: Limpiar carrito y redirigir ─────────────────────────────
+        clearCart();
+        // Pasamos el ID del pedido via navigation state para mostrarlo en la
+        // página de confirmación. useLocation() lo lee del otro lado.
+        navigate("/pedido-confirmado", {
+          state: { orderId: order.id },
+        });
       } catch (orderError) {
         // El pago ya se procesó pero no pudimos guardar en Supabase.
         // En producción, esto debería manejarse con webhooks de Stripe
@@ -200,35 +204,34 @@ function CheckoutForm() {
 
   // ─── Render ────────────────────────────────────────────────────────────────
   return (
-    <main className="pt-24 pb-16 px-4 max-w-6xl mx-auto">
+    <main className="pt-16 pb-16 px-4 sm:px-6 max-w-6xl mx-auto">
       {/* Título de sección */}
-      <div className="mb-10">
-        <p className="text-[#555] text-xs uppercase tracking-[0.25em] mb-2">
+      <div className="mb-6 sm:mb-10">
+        <p className="text-[#555] text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-2">
           Nubeo Store
         </p>
-        <h1 className="text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white uppercase tracking-tight">
           Checkout
         </h1>
       </div>
 
       {/* Layout de dos columnas: resumen | formulario */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
         {/* ── Columna izquierda: resumen del pedido ── */}
         <div className="order-2 lg:order-1">
-          <h2 className="text-xs uppercase tracking-[0.2em] text-[#555] mb-6">
+          <h2 className="text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#555] mb-4 sm:mb-6">
             Resumen del Pedido
           </h2>
 
           {/* Lista de items del carrito */}
-          <div className="space-y-4 mb-6">
+          <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
             {items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center gap-4 border border-[#1a1a1a] p-4"
+                className="flex items-center gap-3 sm:gap-4 border border-[#1a1a1a] p-3 sm:p-4"
               >
                 {/* Imagen del producto o placeholder */}
-                <div className="w-16 h-16 bg-[#111] border border-[#222] flex-shrink-0 flex items-center justify-center overflow-hidden">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#111] border border-[#222] flex-shrink-0 flex items-center justify-center overflow-hidden">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -236,25 +239,29 @@ function CheckoutForm() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-[#333] text-xs">IMG</span>
+                    <span className="text-[#333] text-[10px] sm:text-xs">
+                      IMG
+                    </span>
                   )}
                 </div>
 
                 {/* Info del producto */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm font-medium truncate">
+                  <p className="text-white text-xs sm:text-sm font-medium truncate">
                     {item.name}
                   </p>
                   {item.brand && (
-                    <p className="text-[#555] text-xs">{item.brand}</p>
+                    <p className="text-[#555] text-[10px] sm:text-xs">
+                      {item.brand}
+                    </p>
                   )}
-                  <p className="text-[#555] text-xs mt-1">
+                  <p className="text-[#555] text-[10px] sm:text-xs mt-1">
                     Cant: {item.quantity}
                   </p>
                 </div>
 
                 {/* Subtotal del item */}
-                <p className="text-white text-sm font-bold flex-shrink-0">
+                <p className="text-white text-xs sm:text-sm font-bold flex-shrink-0">
                   {formatCLP(item.price * item.quantity)}
                 </p>
               </div>
@@ -262,12 +269,12 @@ function CheckoutForm() {
           </div>
 
           {/* Total */}
-          <div className="border-t border-[#222] pt-4">
+          <div className="border-t border-[#222] pt-3 sm:pt-4">
             <div className="flex justify-between items-center">
-              <span className="text-[#555] text-xs uppercase tracking-widest">
+              <span className="text-[#555] text-[10px] sm:text-xs uppercase tracking-widest">
                 Total
               </span>
-              <span className="text-white text-2xl font-bold">
+              <span className="text-white text-lg sm:text-2xl font-bold">
                 {formatCLP(totalPrice)}
               </span>
             </div>
@@ -276,14 +283,14 @@ function CheckoutForm() {
 
         {/* ── Columna derecha: formulario de pago ── */}
         <div className="order-1 lg:order-2">
-          <h2 className="text-xs uppercase tracking-[0.2em] text-[#555] mb-6">
+          <h2 className="text-[10px] sm:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[#555] mb-4 sm:mb-6">
             Datos de Pago
           </h2>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             {/* Campo: nombre completo */}
             <div>
-              <label className="block text-xs uppercase tracking-widest text-[#555] mb-2">
+              <label className="block text-[10px] sm:text-xs uppercase tracking-widest text-[#555] mb-2">
                 Nombre Completo
               </label>
               <input
@@ -292,13 +299,13 @@ function CheckoutForm() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Juan Pérez"
-                className="w-full bg-[#0d0d0d] border border-[#222] text-white px-4 py-3 text-sm focus:outline-none focus:border-[#00D4FF] transition-colors placeholder-[#333]"
+                className="w-full bg-[#0d0d0d] border border-[#222] text-white px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:border-[#00D4FF] transition-colors placeholder-[#333]"
               />
             </div>
 
             {/* Campo: email (pre-llenado con el del usuario autenticado) */}
             <div>
-              <label className="block text-xs uppercase tracking-widest text-[#555] mb-2">
+              <label className="block text-[10px] sm:text-xs uppercase tracking-widest text-[#555] mb-2">
                 Email
               </label>
               <input
@@ -307,7 +314,7 @@ function CheckoutForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="tu@email.com"
-                className="w-full bg-[#0d0d0d] border border-[#222] text-white px-4 py-3 text-sm focus:outline-none focus:border-[#00D4FF] transition-colors placeholder-[#333]"
+                className="w-full bg-[#0d0d0d] border border-[#222] text-white px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:border-[#00D4FF] transition-colors placeholder-[#333]"
               />
             </div>
 
@@ -318,19 +325,20 @@ function CheckoutForm() {
             {/* hace que el checkout sea PCI-DSS compliant sin certificación.   */}
             {/* ─────────────────────────────────────────────────────────────── */}
             <div>
-              <label className="block text-xs uppercase tracking-widest text-[#555] mb-2">
+              <label className="block text-[10px] sm:text-xs uppercase tracking-widest text-[#555] mb-2">
                 Datos de Tarjeta
               </label>
               <div
                 id="stripe-card-element"
-                className="w-full bg-[#0d0d0d] border border-[#222] px-4 py-4 focus-within:border-[#00D4FF] transition-colors"
+                className="w-full bg-[#0d0d0d] border border-[#222] px-3 sm:px-4 py-3 sm:py-4 focus-within:border-[#00D4FF] transition-colors"
               >
                 <CardElement options={CARD_ELEMENT_OPTIONS} />
               </div>
 
               {/* Mensaje de tarjeta de prueba */}
-              <p className="text-[#333] text-xs mt-2">
-                Modo test — usá: 4242 4242 4242 4242 · cualquier fecha futura · cualquier CVC
+              <p className="text-[#333] text-[10px] sm:text-xs mt-2">
+                Modo test — usá: 4242 4242 4242 4242 · cualquier fecha futura ·
+                cualquier CVC
               </p>
             </div>
 
@@ -345,7 +353,7 @@ function CheckoutForm() {
             <button
               type="submit"
               disabled={!stripe || isProcessing || items.length === 0}
-              className="w-full bg-[#00D4FF] text-black font-bold py-4 text-sm uppercase tracking-widest hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="w-full bg-[#00D4FF] text-black font-bold py-3 sm:py-4 text-xs sm:text-sm uppercase tracking-widest hover:bg-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {isProcessing
                 ? "Procesando..."
@@ -353,9 +361,9 @@ function CheckoutForm() {
             </button>
 
             {/* Indicador de seguridad */}
-            <div className="flex items-center justify-center gap-2 text-[#333] text-xs">
+            <div className="flex items-center justify-center gap-2 text-[#333] text-[10px] sm:text-xs">
               <svg
-                className="w-3 h-3"
+                className="w-2.5 h-2.5 sm:w-3 sm:h-3"
                 fill="currentColor"
                 viewBox="0 0 20 20"
               >

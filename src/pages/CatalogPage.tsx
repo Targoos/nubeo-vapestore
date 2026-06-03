@@ -177,10 +177,10 @@ export function CatalogPage() {
       <Navbar />
 
       <main className="pt-16">
-        <div className="max-w-[80rem] mx-auto px-6 lg:px-8 py-24">
-          <div className="flex gap-8">
+        <div className="max-w-[80rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
             {/* Desktop Sidebar */}
-            <aside className="hidden lg:block w-[260px] flex-shrink-0">
+            <aside className="hidden lg:block w-[260px] flex-shrink-0 lg:sticky lg:top-24 lg:self-start">
               <FilterSidebar
                 categories={categories.map((c) => c.name)}
                 brands={availableBrands}
@@ -196,9 +196,9 @@ export function CatalogPage() {
             {/* Main Content */}
             <div className="flex-1 min-w-0">
               {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-                <div className="flex items-center gap-4">
-                  <h1 className="text-4xl font-bold text-white tracking-tight uppercase">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight uppercase">
                     CATÁLOGO
                   </h1>
                   {!loading && (
@@ -208,7 +208,7 @@ export function CatalogPage() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <Button
                     variant="secondary"
                     size="md"
@@ -219,11 +219,11 @@ export function CatalogPage() {
                     <span>Filtros</span>
                   </Button>
 
-                  <div className="relative">
+                  <div className="relative flex-1 sm:flex-none">
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="appearance-none bg-[#0d0d0d] border border-[#1a1a1a] rounded-md text-white text-sm px-4 py-2.5 pr-10 focus:outline-none focus:border-[#00D4FF] transition-colors cursor-pointer"
+                      className="w-full appearance-none bg-[#0d0d0d] border border-[#1a1a1a] rounded-md text-white text-sm px-4 py-2.5 pr-10 focus:outline-none focus:border-[#00D4FF] transition-colors cursor-pointer"
                     >
                       {SORT_OPTIONS.map((option) => (
                         <option key={option.value} value={option.value}>
@@ -238,7 +238,7 @@ export function CatalogPage() {
 
               {/* Estado de carga */}
               {loading && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {Array.from({ length: 6 }).map((_, i) => (
                     <div
                       key={i}
@@ -266,7 +266,7 @@ export function CatalogPage() {
               {/* Grid de productos reales */}
               {!loading && !error && (
                 <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredProducts.map((product, index) => (
                       <div
                         key={product.id}

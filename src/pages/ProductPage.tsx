@@ -8,7 +8,8 @@ import { formatCLP } from "../utils/format";
 
 type Tab = "descripcion" | "especificaciones" | "resenas";
 
-const FALLBACK_IMAGE = "https://placehold.co/600x600/0d0d0d/444444?text=Sin+imagen";
+const FALLBACK_IMAGE =
+  "https://placehold.co/600x600/0d0d0d/444444?text=Sin+imagen";
 
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -33,7 +34,7 @@ export function ProductPage() {
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     const elements = contentRef.current?.querySelectorAll(".animate-on-scroll");
@@ -107,25 +108,33 @@ export function ProductPage() {
       <main className="pt-16" ref={contentRef}>
         {/* Breadcrumb */}
         <div
-          className={`max-w-7xl mx-auto px-6 lg:px-8 py-6 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
           style={{ animationDelay: "0ms" }}
         >
-          <nav className="flex items-center gap-2 text-xs tracking-[0.15em] uppercase">
-            <Link to="/" className="text-[#444444] hover:text-white transition-colors">
+          <nav className="flex items-center gap-1 sm:gap-2 text-[10px] sm:text-xs tracking-[0.15em] uppercase overflow-x-auto">
+            <Link
+              to="/"
+              className="text-[#444444] hover:text-white transition-colors whitespace-nowrap"
+            >
               Inicio
             </Link>
             <ChevronRightIcon />
-            <Link to={categoryLink} className="text-[#444444] hover:text-white transition-colors">
+            <Link
+              to={categoryLink}
+              className="text-[#444444] hover:text-white transition-colors whitespace-nowrap"
+            >
               {categoryName}
             </Link>
             <ChevronRightIcon />
-            <span className="text-[#00D4FF]">{product.name}</span>
+            <span className="text-[#00D4FF] truncate max-w-[120px] sm:max-w-none">
+              {product.name}
+            </span>
           </nav>
         </div>
 
         {/* Product Section */}
-        <section className="max-w-7xl mx-auto px-6 lg:px-8 pb-24">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
             {/* Left Column - Image Gallery (60%) */}
             <div
               className={`lg:col-span-3 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
@@ -143,7 +152,7 @@ export function ProductPage() {
 
               {/* Thumbnails — solo si hay más de una imagen */}
               {images.length > 1 && (
-                <div className="grid grid-cols-4 gap-4 mt-4">
+                <div className="grid grid-cols-4 sm:grid-cols-4 gap-2 sm:gap-4 mt-4">
                   {images.map((image, index) => (
                     <button
                       key={index}
@@ -177,12 +186,12 @@ export function ProductPage() {
               </span>
 
               {/* Product Name */}
-              <h1 className="mt-2 text-3xl lg:text-4xl font-bold text-white leading-tight">
+              <h1 className="mt-2 text-xl sm:text-2xl lg:text-3xl lg:text-4xl font-bold text-white leading-tight">
                 {product.name}
               </h1>
 
               {/* Price */}
-              <p className="mt-4 text-[2rem] font-bold text-[#00D4FF]">
+              <p className="mt-4 text-2xl sm:text-3xl lg:text-[2rem] font-bold text-[#00D4FF]">
                 {formatCLP(product.price)}
               </p>
 
@@ -218,17 +227,17 @@ export function ProductPage() {
                     <button
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= 1}
-                      className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-l-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-[#1a1a1a] rounded-l-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <MinusIcon />
                     </button>
-                    <div className="w-16 h-12 flex items-center justify-center border-t border-b border-[#1a1a1a] text-white font-medium">
+                    <div className="w-12 sm:w-16 h-10 sm:h-12 flex items-center justify-center border-t border-b border-[#1a1a1a] text-white font-medium text-sm sm:text-base">
                       {quantity}
                     </div>
                     <button
                       onClick={() => handleQuantityChange(1)}
                       disabled={quantity >= product.stock}
-                      className="w-12 h-12 flex items-center justify-center border border-[#1a1a1a] rounded-r-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center border border-[#1a1a1a] rounded-r-md text-[#444444] hover:text-white hover:border-[rgba(0,212,255,0.5)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <PlusIcon />
                     </button>
@@ -255,9 +264,9 @@ export function ProductPage() {
 
         {/* Tabs Section */}
         <section className="border-t border-[#1a1a1a]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Tab Headers */}
-            <div className="flex gap-8 border-b border-[#1a1a1a]">
+            <div className="flex gap-4 sm:gap-8 border-b border-[#1a1a1a] overflow-x-auto">
               <TabButton
                 active={activeTab === "descripcion"}
                 onClick={() => setActiveTab("descripcion")}
@@ -291,7 +300,8 @@ export function ProductPage() {
               {activeTab === "resenas" && (
                 <div className="max-w-2xl">
                   <p className="text-sm text-[#444444]">
-                    Aún no hay reseñas para este producto. ¡Sé el primero en opinar!
+                    Aún no hay reseñas para este producto. ¡Sé el primero en
+                    opinar!
                   </p>
                 </div>
               )}
@@ -317,7 +327,7 @@ function TabButton({
   return (
     <button
       onClick={onClick}
-      className={`py-4 text-xs font-medium tracking-[0.15em] uppercase transition-colors border-b-2 -mb-px ${
+      className={`py-4 px-2 text-[10px] sm:text-xs font-medium tracking-[0.15em] uppercase transition-colors border-b-2 -mb-px whitespace-nowrap ${
         active
           ? "text-[#00D4FF] border-[#00D4FF]"
           : "text-[#444444] border-transparent hover:text-white"
