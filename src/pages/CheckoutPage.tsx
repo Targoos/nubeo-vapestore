@@ -36,6 +36,7 @@ import { useCart } from "../features/cart/CartContext";
 import { useAuth } from "../features/auth/AuthContext";
 import { createOrder } from "../repositories/ordersRepository";
 import { supabase } from "../lib/supabase";
+import { formatCLP } from "../utils/format";
 
 // ─── Inicializar Stripe ───────────────────────────────────────────────────────
 // loadStripe() se llama FUERA del componente, a nivel de módulo.
@@ -63,15 +64,6 @@ const CARD_ELEMENT_OPTIONS = {
   },
   hidePostalCode: true, // Chile no usa ZIP code
 };
-
-// ─── Formato de precio ────────────────────────────────────────────────────────
-function formatCLP(amount: number): string {
-  return new Intl.NumberFormat("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CheckoutForm — componente interno que usa los hooks de Stripe

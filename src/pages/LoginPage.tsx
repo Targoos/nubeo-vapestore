@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { useAuth } from "../features/auth/AuthContext";
+import { translateError } from "../utils/auth";
 
 export function LoginPage() {
   const [email, setEmail] = useState("");
@@ -172,14 +173,6 @@ export function LoginPage() {
       <Footer />
     </div>
   );
-}
-
-// Traduce los errores más comunes de Supabase Auth (que vienen en inglés)
-function translateError(message: string): string {
-  if (message.includes("Invalid login credentials")) return "Email o contraseña incorrectos.";
-  if (message.includes("Email not confirmed")) return "Confirmá tu email antes de iniciar sesión.";
-  if (message.includes("Too many requests")) return "Demasiados intentos. Esperá unos minutos.";
-  return "Ocurrió un error. Intentá de nuevo.";
 }
 
 function EyeIcon() {

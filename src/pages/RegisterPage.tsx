@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { useAuth } from "../features/auth/AuthContext";
+import { translateError } from "../utils/auth";
 
 export function RegisterPage() {
   const [name, setName] = useState("");
@@ -237,13 +238,6 @@ export function RegisterPage() {
       <Footer />
     </div>
   );
-}
-
-function translateError(message: string): string {
-  if (message.includes("User already registered")) return "Ya existe una cuenta con ese email.";
-  if (message.includes("Password should be at least")) return "La contraseña debe tener al menos 6 caracteres.";
-  if (message.includes("Unable to validate email")) return "El email ingresado no es válido.";
-  return "Ocurrió un error. Intentá de nuevo.";
 }
 
 function EyeIcon() {

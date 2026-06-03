@@ -4,6 +4,7 @@ import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { useProduct } from "../hooks/useProduct";
 import { useCart } from "../features/cart/CartContext";
+import { formatCLP } from "../utils/format";
 
 type Tab = "descripcion" | "especificaciones" | "resenas";
 
@@ -40,14 +41,6 @@ export function ProductPage() {
 
     return () => observer.disconnect();
   }, []);
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-CL", {
-      style: "currency",
-      currency: "CLP",
-      minimumFractionDigits: 0,
-    }).format(price);
-  };
 
   const handleQuantityChange = (delta: number) => {
     if (!product) return;
@@ -190,7 +183,7 @@ export function ProductPage() {
 
               {/* Price */}
               <p className="mt-4 text-[2rem] font-bold text-[#00D4FF]">
-                {formatPrice(product.price)}
+                {formatCLP(product.price)}
               </p>
 
               {/* Stock Badge */}

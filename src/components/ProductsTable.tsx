@@ -1,18 +1,11 @@
 import type { Product } from "../types";
+import { formatCLP } from "../utils/format";
 
 interface Props {
   products: Product[];
   onEdit: (product: Product) => void;
   onDelete: (product: Product) => void;
 }
-
-const formatCLP = (amount: number): string => {
-  return new Intl.NumberFormat("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    minimumFractionDigits: 0,
-  }).format(amount);
-};
 
 export function ProductsTable({ products, onEdit, onDelete }: Props) {
   return (

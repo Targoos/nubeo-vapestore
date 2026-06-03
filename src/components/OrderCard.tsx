@@ -1,4 +1,5 @@
 import type { Order } from "../types";
+import { formatCLP } from "../utils/format";
 
 interface Props {
     order: Order
@@ -17,14 +18,6 @@ const getStatusColor = (status: string): string => {
     default:
       return "text-[#444444]";
   }
-};
-
-const formatCLP = (amount: number): string => {
-  return new Intl.NumberFormat("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    minimumFractionDigits: 0,
-  }).format(amount);
 };
 
 export function OrderCard({ order }: Props) {
