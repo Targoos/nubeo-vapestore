@@ -7,15 +7,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Product } from "../../types/product";
-
-export interface CartItem {
-  id: string;
-  name: string;
-  brand: string | null;
-  price: number;
-  quantity: number;
-  image: string | null;
-}
+import type { CartItem } from "../../types/cart";
 
 interface CartContextValue {
   items: CartItem[];

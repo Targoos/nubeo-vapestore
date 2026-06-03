@@ -1,6 +1,6 @@
 import { supabase } from "../lib/supabase";
 import type { Order } from "../types/order";
-import type { CartItem } from "../features/cart/CartContext";
+import type { CartItem } from "../types/cart";
 
 interface CreateOrderInput {
   userId: string;

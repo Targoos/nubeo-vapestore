@@ -5,3 +5,4 @@ export type {
   UpdateProductInput,
 } from "./product";
 export type { Order, OrderItem, OrderStatus } from "./order";
+export type { CartItem } from "./cart";
