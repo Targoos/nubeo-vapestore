@@ -106,6 +106,7 @@ nubeo-vapestore/
 
 - ✅ Registro de usuarios
 - ✅ Login/Logout seguro
+- ✅ Login con Google (OAuth)
 - ✅ Rutas privadas con protección
 - ✅ Perfil de usuario
 
@@ -238,7 +239,7 @@ El proyecto está desplegado en Vercel:
 
 ## 📄 Licencia
 
-Este proyecto es privado y propiedad de Nubeo.
+MIT - Proyecto de portfolio
 
 ## 👨‍💻 Desarrollo
 
