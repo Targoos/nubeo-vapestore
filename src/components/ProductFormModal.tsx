@@ -203,7 +203,7 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
               </label>
               <input
                 type="text"
-                value={formData.brand}
+                value={formData.brand ?? ""}
                 onChange={(e) => handleChange("brand", e.target.value)}
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors"
               />
@@ -214,7 +214,7 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
                 Descripción
               </label>
               <textarea
-                value={formData.description}
+                value={formData.description ?? ""}
                 onChange={(e) => handleChange("description", e.target.value)}
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors resize-none"
                 rows={4}

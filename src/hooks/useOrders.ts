@@ -17,7 +17,7 @@ export function useOrders() {
       try {
         setLoading(true);
         setError(null);
-        const orders = await getOrdersByUser(user?.id);
+        const orders = await getOrdersByUser(user!.id);
         setData(orders);
       } catch (err) {
         setError(
