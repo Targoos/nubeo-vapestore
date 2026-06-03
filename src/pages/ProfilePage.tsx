@@ -32,7 +32,6 @@ export function ProfilePage() {
       <Navbar />
       <main className="pt-16 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1">
         <div className="max-w-7xl mx-auto">
-          {/* Header with user info and sign out */}
           <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-4 sm:p-6 mb-6 sm:mb-8 mt-6 sm:mt-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-8">
               <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
@@ -64,7 +63,6 @@ export function ProfilePage() {
             </div>
           </div>
 
-          {/* Orders Grid */}
           <div className="pt-4">
             <h1 className="text-lg sm:text-xl font-semibold text-white uppercase tracking-tight mb-4 sm:mb-6">
               Mis Órdenes
@@ -119,7 +117,6 @@ export function ProfilePage() {
       </main>
       <Footer />
 
-      {/* Order Detail Modal */}
       <OrderModal
         order={selectedOrder}
         onClose={() => setSelectedOrder(null)}

@@ -5,7 +5,6 @@ export function Hero() {
     <section className="relative min-h-screen bg-[#080808] flex items-center pt-16">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-24">
         <div className="max-w-3xl">
-          {/* Label tag */}
           <div className="animate-fade-in-up inline-flex items-center gap-2 px-3 py-1 bg-[#00D4FF]/10 border border-[#00D4FF]/30 rounded-full mb-8">
             <span className="w-1.5 h-1.5 bg-[#00D4FF] rounded-full" />
             <span className="text-xs font-medium tracking-[0.15em] text-[#00D4FF] uppercase">
@@ -13,19 +12,16 @@ export function Hero() {
             </span>
           </div>
 
-          {/* Main headline - clean, large */}
           <h1 className="animate-fade-in-up delay-100 text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight text-white leading-[1.1]">
             <span className="block">EL FUTURO DEL</span>
             <span className="block text-[#00D4FF]">VAPEO</span>
           </h1>
 
-          {/* Subtitle */}
           <p className="animate-fade-in-up delay-200 mt-6 text-lg text-[#444444] max-w-xl leading-relaxed">
-            Descubre nuestra colección de equipos de vapeo premium.
-            Dispositivos de calidad, sabores auténticos, experiencia excepcional.
+            Descubre nuestra colección de equipos de vapeo premium. Dispositivos
+            de calidad, sabores auténticos, experiencia excepcional.
           </p>
 
-          {/* CTA Buttons */}
           <div className="animate-fade-in-up delay-300 mt-10 flex flex-col sm:flex-row items-start gap-4">
             <a
               href="#categorias"
@@ -41,7 +37,6 @@ export function Hero() {
             </a>
           </div>
 
-          {/* Stats */}
           <div className="animate-fade-in-up delay-400 mt-16 pt-8 border-t border-[#1a1a1a] flex items-center gap-12">
             <CountUpStat value={500} suffix="+" label="Productos" />
             <CountUpStat value={50} suffix="+" label="Marcas" />
@@ -53,7 +48,15 @@ export function Hero() {
   );
 }
 
-function CountUpStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
+function CountUpStat({
+  value,
+  suffix,
+  label,
+}: {
+  value: number;
+  suffix: string;
+  label: string;
+}) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const hasAnimated = useRef(false);
@@ -84,7 +87,7 @@ function CountUpStat({ value, suffix, label }: { value: number; suffix: string; 
           }, stepDuration);
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.5 },
     );
 
     observer.observe(element);
@@ -94,9 +97,12 @@ function CountUpStat({ value, suffix, label }: { value: number; suffix: string; 
   return (
     <div ref={ref}>
       <span className="block text-2xl font-semibold text-white">
-        {count}{suffix}
+        {count}
+        {suffix}
       </span>
-      <span className="text-xs tracking-[0.1em] text-[#444444] uppercase">{label}</span>
+      <span className="text-xs tracking-[0.1em] text-[#444444] uppercase">
+        {label}
+      </span>
     </div>
   );
 }
@@ -105,7 +111,9 @@ function StaticStat({ value, label }: { value: string; label: string }) {
   return (
     <div>
       <span className="block text-2xl font-semibold text-white">{value}</span>
-      <span className="text-xs tracking-[0.1em] text-[#444444] uppercase">{label}</span>
+      <span className="text-xs tracking-[0.1em] text-[#444444] uppercase">
+        {label}
+      </span>
     </div>
   );
 }

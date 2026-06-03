@@ -51,8 +51,6 @@ export function ProductPage() {
     }
   };
 
-  // --- Estados de carga y error ---
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#080808]">
@@ -93,8 +91,6 @@ export function ProductPage() {
     );
   }
 
-  // A partir de aquí, product está garantizado como no-null
-
   const images = product.images.length > 0 ? product.images : [FALLBACK_IMAGE];
   const categoryName = product.category?.name ?? "Catálogo";
   const categorySlug = product.category?.slug ?? "";
@@ -106,7 +102,6 @@ export function ProductPage() {
     <div className="min-h-screen bg-[#080808]">
       <Navbar />
       <main className="pt-16" ref={contentRef}>
-        {/* Breadcrumb */}
         <div
           className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
           style={{ animationDelay: "0ms" }}
@@ -132,15 +127,12 @@ export function ProductPage() {
           </nav>
         </div>
 
-        {/* Product Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
-            {/* Left Column - Image Gallery (60%) */}
             <div
               className={`lg:col-span-3 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
               style={{ animationDelay: "100ms" }}
             >
-              {/* Main Image */}
               <div className="bg-[#0d0d0d] rounded-lg overflow-hidden aspect-square flex items-center justify-center">
                 <img
                   src={images[selectedImage]}
@@ -150,7 +142,6 @@ export function ProductPage() {
                 />
               </div>
 
-              {/* Thumbnails — solo si hay más de una imagen */}
               {images.length > 1 && (
                 <div className="grid grid-cols-4 sm:grid-cols-4 gap-2 sm:gap-4 mt-4">
                   {images.map((image, index) => (
@@ -175,27 +166,22 @@ export function ProductPage() {
               )}
             </div>
 
-            {/* Right Column - Product Info (40%) */}
             <div
               className={`lg:col-span-2 ${isVisible ? "animate-fade-in-up" : "opacity-0"}`}
               style={{ animationDelay: "200ms" }}
             >
-              {/* Categoría como etiqueta de marca */}
               <span className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase">
                 {categoryName}
               </span>
 
-              {/* Product Name */}
               <h1 className="mt-2 text-xl sm:text-2xl lg:text-3xl lg:text-4xl font-bold text-white leading-tight">
                 {product.name}
               </h1>
 
-              {/* Price */}
               <p className="mt-4 text-2xl sm:text-3xl lg:text-[2rem] font-bold text-[#00D4FF]">
                 {formatCLP(product.price)}
               </p>
 
-              {/* Stock Badge */}
               <div className="mt-4">
                 {product.stock > 0 ? (
                   <span className="inline-flex items-center px-3 py-1 text-xs font-medium tracking-[0.1em] uppercase bg-[rgba(0,255,0,0.1)] text-[#00ff88] border border-[rgba(0,255,0,0.3)] rounded-full">
@@ -210,14 +196,12 @@ export function ProductPage() {
                 )}
               </div>
 
-              {/* Descripción */}
               {product.description && (
                 <p className="mt-6 text-sm text-[#444444] leading-relaxed">
                   {product.description}
                 </p>
               )}
 
-              {/* Quantity Selector — solo si hay stock */}
               {product.stock > 0 && (
                 <div className="mt-8">
                   <label className="text-xs font-medium tracking-[0.15em] text-[#444444] uppercase">
@@ -245,7 +229,6 @@ export function ProductPage() {
                 </div>
               )}
 
-              {/* Action Buttons */}
               <div className="mt-8 space-y-4">
                 <button
                   disabled={product.stock === 0}
@@ -262,10 +245,8 @@ export function ProductPage() {
           </div>
         </section>
 
-        {/* Tabs Section */}
         <section className="border-t border-[#1a1a1a]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Tab Headers */}
             <div className="flex gap-4 sm:gap-8 border-b border-[#1a1a1a] overflow-x-auto">
               <TabButton
                 active={activeTab === "descripcion"}
@@ -281,7 +262,6 @@ export function ProductPage() {
               </TabButton>
             </div>
 
-            {/* Tab Content */}
             <div className="py-12 animate-on-scroll">
               {activeTab === "descripcion" && (
                 <div className="max-w-3xl">
@@ -314,7 +294,6 @@ export function ProductPage() {
   );
 }
 
-// Tab Button Component
 function TabButton({
   active,
   onClick,
@@ -338,7 +317,6 @@ function TabButton({
   );
 }
 
-// Icons
 function ChevronRightIcon() {
   return (
     <svg

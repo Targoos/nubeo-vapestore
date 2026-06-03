@@ -27,13 +27,14 @@ export function OrderModal({ order, onClose }: Props) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
       <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Modal Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#1a1a1a]">
           <div>
             <h2 className="text-lg font-semibold text-white uppercase tracking-tight">
               Detalle del Pedido
             </h2>
-            <p className="text-sm text-[#444444] mt-1">#{order.id.slice(0, 8)}</p>
+            <p className="text-sm text-[#444444] mt-1">
+              #{order.id.slice(0, 8)}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -56,12 +57,12 @@ export function OrderModal({ order, onClose }: Props) {
           </button>
         </div>
 
-        {/* Modal Content */}
         <div className="p-6">
-          {/* Order Info */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
-              <p className="text-xs text-[#444444] uppercase tracking-[0.15em] mb-1">Fecha</p>
+              <p className="text-xs text-[#444444] uppercase tracking-[0.15em] mb-1">
+                Fecha
+              </p>
               <p className="text-white">
                 {new Date(order.created_at).toLocaleDateString("es-CL", {
                   day: "numeric",
@@ -71,14 +72,17 @@ export function OrderModal({ order, onClose }: Props) {
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#444444] uppercase tracking-[0.15em] mb-1">Estado</p>
-              <p className={`text-sm font-medium uppercase tracking-[0.1em] ${getStatusColor(order.status)}`}>
+              <p className="text-xs text-[#444444] uppercase tracking-[0.15em] mb-1">
+                Estado
+              </p>
+              <p
+                className={`text-sm font-medium uppercase tracking-[0.1em] ${getStatusColor(order.status)}`}
+              >
                 {order.status}
               </p>
             </div>
           </div>
 
-          {/* Items List */}
           {order.items && order.items.length > 0 && (
             <div className="mb-6">
               <h3 className="text-sm font-semibold text-white uppercase tracking-[0.15em] mb-4">
@@ -86,7 +90,10 @@ export function OrderModal({ order, onClose }: Props) {
               </h3>
               <div className="space-y-3">
                 {order.items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between py-3 border-b border-[#1a1a1a]">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between py-3 border-b border-[#1a1a1a]"
+                  >
                     <div className="flex-1">
                       <p className="text-white font-medium">
                         {item.product?.name || "Producto"}
@@ -104,7 +111,6 @@ export function OrderModal({ order, onClose }: Props) {
             </div>
           )}
 
-          {/* Total */}
           <div className="flex items-center justify-between pt-4 border-t border-[#1a1a1a]">
             <p className="text-sm font-semibold text-white uppercase tracking-[0.15em]">
               Total

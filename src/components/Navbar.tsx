@@ -29,14 +29,12 @@ export function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#080808]/95 backdrop-blur-sm border-b border-[#1a1a1a]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo - left */}
           <Link to="/" className="flex items-center">
             <span className="text-lg font-semibold tracking-[0.2em] text-white uppercase">
               NUBEO
             </span>
           </Link>
 
-          {/* Navigation Links - center */}
           <div className="hidden md:flex items-center gap-10">
             <NavLink to="/catalogo" active={isCatalogActive}>
               CATÁLOGO
@@ -67,9 +65,7 @@ export function Navbar() {
             </NavLink>
           </div>
 
-          {/* Right side: auth + cart */}
           <div className="flex items-center gap-3">
-            {/* Autenticación: muestra MI CUENTA o INICIAR SESIÓN según el estado */}
             {user ? (
               <>
                 <Link
@@ -94,7 +90,6 @@ export function Navbar() {
               </Link>
             )}
 
-            {/* Cart */}
             <Link
               to="/cart"
               className="relative flex items-center gap-2 px-4 py-2 bg-transparent text-white border border-[#00D4FF] rounded-md hover:bg-[#00D4FF]/10 transition-colors duration-200"
@@ -106,7 +101,6 @@ export function Navbar() {
               </span>
             </Link>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden p-2 text-[#444444] hover:text-white transition-colors"
@@ -118,7 +112,6 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 bg-[#080808] border-t border-[#1a1a1a] shadow-xl z-50">
           <div className="px-6 py-4 space-y-3">

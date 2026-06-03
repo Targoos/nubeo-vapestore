@@ -15,7 +15,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Rutas públicas — accesibles sin login */}
         <Route path="/" element={<HomePage />} />
         <Route path="/catalogo" element={<CatalogPage />} />
         <Route path="/producto/:slug" element={<ProductPage />} />
@@ -23,9 +22,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
         <Route path="/pedido-confirmado" element={<OrderConfirmationPage />} />
-        <Route path="/perfil" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-
-        {/* Rutas protegidas — PrivateRoute verifica el login antes de renderizar */}
+        <Route
+          path="/perfil"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/checkout"
           element={

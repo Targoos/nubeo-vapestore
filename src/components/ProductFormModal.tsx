@@ -10,7 +10,13 @@ interface Props {
   onSave: (data: CreateProductInput) => Promise<void>;
 }
 
-export function ProductFormModal({ product, categories, isOpen, onClose, onSave }: Props) {
+export function ProductFormModal({
+  product,
+  categories,
+  isOpen,
+  onClose,
+  onSave,
+}: Props) {
   const [formData, setFormData] = useState<CreateProductInput>({
     name: "",
     slug: "",
@@ -61,14 +67,16 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
       await onSave(formData);
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error al guardar producto");
+      setError(
+        err instanceof Error ? err.message : "Error al guardar producto",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const handleChange = (field: keyof CreateProductInput, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   if (!isOpen) return null;
@@ -76,7 +84,6 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
       <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        {/* Modal Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#1a1a1a]">
           <h2 className="text-lg font-semibold text-white uppercase tracking-tight">
             {product ? "Editar Producto" : "Nuevo Producto"}
@@ -102,7 +109,6 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
           </button>
         </div>
 
-        {/* Modal Content */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           {error && (
             <div className="bg-red-500/10 border border-red-500/40 text-red-400 px-4 py-3 rounded-md">
@@ -143,7 +149,9 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
               </label>
               <select
                 value={formData.category_id || ""}
-                onChange={(e) => handleChange("category_id", e.target.value || null)}
+                onChange={(e) =>
+                  handleChange("category_id", e.target.value || null)
+                }
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors"
               >
                 <option value="">Sin categoría</option>
@@ -162,7 +170,9 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
               <input
                 type="text"
                 value={formData.price}
-                onChange={(e) => handleChange("price", parseFloat(e.target.value) || 0)}
+                onChange={(e) =>
+                  handleChange("price", parseFloat(e.target.value) || 0)
+                }
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors"
                 required
                 min="0"
@@ -177,7 +187,9 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
               <input
                 type="text"
                 value={formData.stock}
-                onChange={(e) => handleChange("stock", parseInt(e.target.value) || 0)}
+                onChange={(e) =>
+                  handleChange("stock", parseInt(e.target.value) || 0)
+                }
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors"
                 required
                 min="0"
@@ -191,7 +203,9 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
               <input
                 type="text"
                 value={formData.images[0] || ""}
-                onChange={(e) => handleChange("images", e.target.value ? [e.target.value] : [])}
+                onChange={(e) =>
+                  handleChange("images", e.target.value ? [e.target.value] : [])
+                }
                 className="w-full bg-[#080808] border border-[#1a1a1a] rounded-md px-4 py-3 text-white focus:outline-none focus:border-[#00D4FF] transition-colors"
                 placeholder="https://..."
               />
@@ -234,7 +248,6 @@ export function ProductFormModal({ product, categories, isOpen, onClose, onSave 
             </div>
           </div>
 
-          {/* Actions */}
           <div className="flex gap-4 pt-4">
             <button
               type="button"

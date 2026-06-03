@@ -39,8 +39,6 @@ export function CatalogPage() {
   const [visibleProducts, setVisibleProducts] = useState<number[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Derivamos las marcas disponibles desde los productos reales de Supabase.
-  // useMemo evita recalcular en cada render — solo se recalcula cuando allProducts cambia.
   const availableBrands = useMemo(() => {
     const brands = allProducts
       .map((p) => p.brand)
@@ -48,8 +46,6 @@ export function CatalogPage() {
     return [...new Set(brands)].sort();
   }, [allProducts]);
 
-  // Sincronizar ?categoria= con el filtro de categorías.
-  // Depende de `categories` porque necesitamos los datos reales para mapear slug → nombre.
   useEffect(() => {
     const slug = searchParams.get("categoria");
     if (!slug || categories.length === 0) {
@@ -63,8 +59,6 @@ export function CatalogPage() {
     }));
   }, [searchParams, categories]);
 
-  // Filtrado y ordenamiento client-side.
-  // Con 12 productos es eficiente. Si la tienda crece a miles, mover los filtros al repositorio.
   const filteredProducts = useMemo(() => {
     return allProducts
       .filter((product) => {
@@ -105,7 +99,6 @@ export function CatalogPage() {
       });
   }, [allProducts, filters, sortBy]);
 
-  // Animación de entrada de tarjetas al hacer scroll
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -133,7 +126,6 @@ export function CatalogPage() {
     return () => observer.disconnect();
   }, [filteredProducts]);
 
-  // Reiniciar animaciones cuando cambian los filtros
   useEffect(() => {
     setVisibleProducts([]);
   }, [filters, sortBy]);
@@ -179,7 +171,6 @@ export function CatalogPage() {
       <main className="pt-16">
         <div className="max-w-[80rem] mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
-            {/* Desktop Sidebar */}
             <aside className="hidden lg:block w-[260px] flex-shrink-0 lg:sticky lg:top-24 lg:self-start">
               <FilterSidebar
                 categories={categories.map((c) => c.name)}
@@ -193,9 +184,7 @@ export function CatalogPage() {
               />
             </aside>
 
-            {/* Main Content */}
             <div className="flex-1 min-w-0">
-              {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div className="flex items-center gap-3">
                   <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight uppercase">
@@ -236,7 +225,6 @@ export function CatalogPage() {
                 </div>
               </div>
 
-              {/* Estado de carga */}
               {loading && (
                 <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {Array.from({ length: 6 }).map((_, i) => (
@@ -255,7 +243,6 @@ export function CatalogPage() {
                 </div>
               )}
 
-              {/* Estado de error */}
               {error && (
                 <p className="text-[#666666] text-sm">
                   No se pudieron cargar los productos. Intenta recargar la
@@ -263,7 +250,6 @@ export function CatalogPage() {
                 </p>
               )}
 
-              {/* Grid de productos reales */}
               {!loading && !error && (
                 <>
                   <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -329,8 +315,6 @@ export function CatalogPage() {
     </div>
   );
 }
-
-// --- Íconos ---
 
 function FilterIcon() {
   return (

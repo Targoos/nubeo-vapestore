@@ -18,7 +18,6 @@ export function CartPage() {
       <Navbar />
       <main className="pt-16 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Page Title */}
           <div className="animate-fade-in-up">
             <h1 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-tight flex items-center gap-3 sm:gap-4">
               MI CARRITO
@@ -31,7 +30,6 @@ export function CartPage() {
           </div>
 
           {cartItems.length === 0 ? (
-            /* Empty Cart State */
             <div className="animate-fade-in-up delay-100 flex flex-col items-center justify-center py-24">
               <div className="w-24 h-24 mb-8 text-[#444444]">
                 <EmptyCartIcon />
@@ -50,9 +48,7 @@ export function CartPage() {
               </Link>
             </div>
           ) : (
-            /* Cart with Items */
             <div className="mt-6 sm:mt-10 flex flex-col lg:flex-row gap-6 lg:gap-10">
-              {/* Left Column - Cart Items */}
               <div className="lg:w-[65%] space-y-3 sm:space-y-4">
                 {cartItems.map((item, index) => (
                   <div
@@ -61,12 +57,10 @@ export function CartPage() {
                     style={{ animationDelay: `${(index + 1) * 100}ms` }}
                   >
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                      {/* Product Image */}
                       <div className="w-full sm:w-24 h-24 sm:h-28 bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg flex items-center justify-center flex-shrink-0">
                         <div className="w-12 h-16 bg-gradient-to-b from-[#1a1a1a] to-[#0d0d0d] rounded" />
                       </div>
 
-                      {/* Product Details */}
                       <div className="flex-1 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                         <div className="flex-1">
                           <span className="text-xs text-[#444444] uppercase tracking-[0.1em]">
@@ -81,7 +75,6 @@ export function CartPage() {
                         </div>
 
                         <div className="flex items-center justify-between sm:justify-end gap-4 sm:gap-6">
-                          {/* Quantity Controls */}
                           <div className="flex items-center border border-[#1a1a1a] rounded-md">
                             <button
                               onClick={() => updateQuantity(item.id, -1)}
@@ -102,14 +95,12 @@ export function CartPage() {
                             </button>
                           </div>
 
-                          {/* Item Subtotal */}
                           <div className="text-right min-w-[70px] sm:min-w-[80px]">
                             <span className="text-white font-semibold text-sm">
                               ${(item.price * item.quantity).toLocaleString()}
                             </span>
                           </div>
 
-                          {/* Remove Button */}
                           <button
                             onClick={() => removeFromCart(item.id)}
                             className="p-2 text-[#444444] hover:text-white transition-colors"
@@ -124,7 +115,6 @@ export function CartPage() {
                 ))}
               </div>
 
-              {/* Right Column - Order Summary */}
               <div className="lg:w-[35%]">
                 <div className="animate-fade-in-up delay-200 bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg p-4 sm:p-6 sticky top-24">
                   <h2 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight mb-4 sm:mb-6">

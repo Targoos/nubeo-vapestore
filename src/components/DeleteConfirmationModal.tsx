@@ -7,7 +7,12 @@ interface Props {
   itemName: string;
 }
 
-export function DeleteConfirmationModal({ isOpen, onClose, onConfirm, itemName }: Props) {
+export function DeleteConfirmationModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  itemName,
+}: Props) {
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
@@ -25,20 +30,19 @@ export function DeleteConfirmationModal({ isOpen, onClose, onConfirm, itemName }
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
       <div className="bg-[#0d0d0d] border border-[#1a1a1a] rounded-lg max-w-md w-full">
-        {/* Modal Header */}
         <div className="p-6 border-b border-[#1a1a1a]">
           <h2 className="text-lg font-semibold text-white uppercase tracking-tight">
             Confirmar Eliminación
           </h2>
         </div>
 
-        {/* Modal Content */}
         <div className="p-6">
           <p className="text-[#444444] mb-6">
-            ¿Estás seguro de que deseas eliminar <span className="text-white font-semibold">"{itemName}"</span>? Esta acción no se puede deshacer.
+            ¿Estás seguro de que deseas eliminar{" "}
+            <span className="text-white font-semibold">"{itemName}"</span>? Esta
+            acción no se puede deshacer.
           </p>
 
-          {/* Actions */}
           <div className="flex gap-4">
             <button
               onClick={onClose}
