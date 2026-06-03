@@ -41,7 +41,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <PrivateRoute>
+            <PrivateRoute requireAdmin>
               <AdminPage />
             </PrivateRoute>
           }

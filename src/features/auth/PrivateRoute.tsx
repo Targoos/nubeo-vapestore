@@ -3,9 +3,13 @@ import { useAuth } from "./AuthContext";
 
 interface PrivateRouteProps {
   children: React.ReactNode;
+  requireAdmin?: boolean;
 }
 
-export function PrivateRoute({ children }: PrivateRouteProps) {
+export function PrivateRoute({
+  children,
+  requireAdmin = false,
+}: PrivateRouteProps) {
   const { user, isLoading } = useAuth();
   const location = useLocation();
 
@@ -21,6 +25,10 @@ export function PrivateRoute({ children }: PrivateRouteProps) {
 
   if (!user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (requireAdmin && user.user_metadata?.role !== "admin") {
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;
