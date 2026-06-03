@@ -109,15 +109,6 @@ export function LoginPage() {
               </div>
             </div>
 
-            <div className="text-right">
-              <Link
-                to="/recuperar"
-                className="text-sm text-[#00D4FF] hover:underline"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-
             {error && (
               <p className="text-red-400 text-sm text-center">{error}</p>
             )}
