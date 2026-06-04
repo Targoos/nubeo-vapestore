@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface ProductCardProps {
@@ -18,6 +19,7 @@ export function ProductCard({
   visible = true,
   onAddToCart,
 }: ProductCardProps) {
+  const [isAdded, setIsAdded] = useState(false);
   return (
     <Link
       to={`/producto/${slug}`}
@@ -38,10 +40,16 @@ export function ProductCard({
               e.preventDefault();
               e.stopPropagation();
               onAddToCart?.();
+              setIsAdded(true);
+              setTimeout(() => setIsAdded(false), 2000);
             }}
-            className="px-6 py-2.5 bg-[#00D4FF] text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md hover:bg-[#00D4FF]/90 transition-colors cursor-pointer"
+            className={`px-6 py-2.5 text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md transition-colors cursor-pointer ${
+              isAdded
+                ? "bg-[#00ff88] hover:bg-[#00ff88]/90"
+                : "bg-[#00D4FF] hover:bg-[#00D4FF]/90"
+            }`}
           >
-            AGREGAR
+            {isAdded ? "✓ AGREGADO" : "AGREGAR"}
           </button>
         </div>
       </div>

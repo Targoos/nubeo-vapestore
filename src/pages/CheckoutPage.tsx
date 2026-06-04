@@ -77,13 +77,8 @@ function CheckoutForm() {
       "create-payment-intent",
       {
         body: {
-          amount: totalPrice,
           currency: "clp",
-          items: items.map((i) => ({
-            id: i.id,
-            name: i.name,
-            quantity: i.quantity,
-          })),
+          items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
         },
       },
     );

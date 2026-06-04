@@ -19,6 +19,7 @@ export function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<Tab>("descripcion");
   const [isVisible, setIsVisible] = useState(false);
+  const [isAdded, setIsAdded] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -232,10 +233,18 @@ export function ProductPage() {
               <div className="mt-8 space-y-4">
                 <button
                   disabled={product.stock === 0}
-                  onClick={() => addToCart(product, quantity)}
-                  className="w-full py-4 bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)] text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                  onClick={() => {
+                    addToCart(product, quantity);
+                    setIsAdded(true);
+                    setTimeout(() => setIsAdded(false), 2000);
+                  }}
+                  className={`w-full py-4 text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
+                    isAdded
+                      ? "bg-[#00ff88] hover:bg-[rgba(0,255,136,0.9)]"
+                      : "bg-[#00D4FF] hover:bg-[rgba(0,212,255,0.9)]"
+                  }`}
                 >
-                  Agregar al Carrito
+                  {isAdded ? "✓ Agregado" : "Agregar al Carrito"}
                 </button>
                 <button className="w-full py-4 bg-transparent border border-white hover:bg-[rgba(255,255,255,0.05)] text-white text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors">
                   Agregar a Favoritos
