@@ -168,7 +168,7 @@ export function ProductFormModal({
                 Precio
               </label>
               <input
-                type="text"
+                type="number"
                 value={formData.price}
                 onChange={(e) =>
                   handleChange("price", parseFloat(e.target.value) || 0)
@@ -185,7 +185,7 @@ export function ProductFormModal({
                 Stock
               </label>
               <input
-                type="text"
+                type="number"
                 value={formData.stock}
                 onChange={(e) =>
                   handleChange("stock", parseInt(e.target.value) || 0)
