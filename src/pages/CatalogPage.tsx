@@ -29,7 +29,7 @@ export function CatalogPage() {
   const { addToCart } = useCart();
 
   const [filters, setFilters] = useState({
-    categories: [] as string[],
+    categoryIds: [] as string[],
     brands: [] as string[],
     priceRange: [0, 150000] as [number, number],
     inStockOnly: false,
@@ -50,13 +50,13 @@ export function CatalogPage() {
   useEffect(() => {
     const slug = searchParams.get("categoria");
     if (!slug || categories.length === 0) {
-      setFilters((prev) => ({ ...prev, categories: [] }));
+      setFilters((prev) => ({ ...prev, categoryIds: [] }));
       return;
     }
     const match = categories.find((c) => c.slug === slug);
     setFilters((prev) => ({
       ...prev,
-      categories: match ? [match.name] : [],
+      categoryIds: match ? [match.id] : [],
     }));
   }, [searchParams, categories]);
 
@@ -64,8 +64,8 @@ export function CatalogPage() {
     return allProducts
       .filter((product) => {
         if (
-          filters.categories.length > 0 &&
-          !filters.categories.includes(product.category?.name ?? "")
+          filters.categoryIds.length > 0 &&
+          !filters.categoryIds.includes(product.category_id ?? "")
         )
           return false;
         if (
@@ -140,12 +140,12 @@ export function CatalogPage() {
     setCurrentPage(1);
   }, [filters, sortBy]);
 
-  const toggleCategory = (category: string) => {
+  const toggleCategory = (categoryId: string) => {
     setFilters((prev) => ({
       ...prev,
-      categories: prev.categories.includes(category)
-        ? prev.categories.filter((c) => c !== category)
-        : [...prev.categories, category],
+      categoryIds: prev.categoryIds.includes(categoryId)
+        ? prev.categoryIds.filter((id) => id !== categoryId)
+        : [...prev.categoryIds, categoryId],
     }));
   };
 
@@ -160,7 +160,7 @@ export function CatalogPage() {
 
   const clearFilters = () => {
     setFilters({
-      categories: [],
+      categoryIds: [],
       brands: [],
       priceRange: [0, 150000],
       inStockOnly: false,
@@ -168,7 +168,7 @@ export function CatalogPage() {
   };
 
   const hasActiveFilters =
-    filters.categories.length > 0 ||
+    filters.categoryIds.length > 0 ||
     filters.brands.length > 0 ||
     filters.priceRange[0] > 0 ||
     filters.priceRange[1] < 150000 ||
@@ -183,7 +183,7 @@ export function CatalogPage() {
           <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
             <aside className="hidden lg:block w-[260px] flex-shrink-0 lg:sticky lg:top-24 lg:self-start">
               <FilterSidebar
-                categories={categories.map((c) => c.name)}
+                categories={categories.map((c) => ({ id: c.id, name: c.name }))}
                 brands={availableBrands}
                 filters={filters}
                 toggleCategory={toggleCategory}
@@ -314,7 +314,7 @@ export function CatalogPage() {
       <MobileFilterDrawer
         isOpen={mobileFiltersOpen}
         onClose={() => setMobileFiltersOpen(false)}
-        categories={categories.map((c) => c.name)}
+        categories={categories.map((c) => ({ id: c.id, name: c.name }))}
         brands={availableBrands}
         filters={filters}
         toggleCategory={toggleCategory}

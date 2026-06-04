@@ -16,6 +16,12 @@ export interface Product {
   category?: Category;
 }
 
+export interface ProductFilters {
+  categoryId?: string;
+  search?: string;
+  onlyActive?: boolean;
+}
+
 export type CreateProductInput = Omit<
   Product,
   "id" | "created_at" | "updated_at" | "category"

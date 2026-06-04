@@ -1,12 +1,10 @@
 import { supabase } from "../lib/supabase";
-import type { Product, CreateProductInput, UpdateProductInput } from "../types";
-
-interface ProductFilters {
-  categoryId?: string;
-  search?: string;
-  onlyActive?: boolean;
-}
-
+import type {
+  Product,
+  ProductFilters,
+  CreateProductInput,
+  UpdateProductInput,
+} from "../types";
 
 export async function getProducts(
   filters: ProductFilters = {},
@@ -43,7 +41,6 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
   return data;
 }
-
 
 export async function createProduct(
   input: CreateProductInput,

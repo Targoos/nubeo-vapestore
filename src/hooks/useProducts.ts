@@ -1,12 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import type { Product } from "../types";
+import type { Product, ProductFilters } from "../types";
 import { getProducts } from "../repositories/productsRepository";
-
-interface ProductFilters {
-  categoryId?: string;
-  search?: string;
-  onlyActive?: boolean;
-}
 
 interface UseProductsResult {
   data: Product[];

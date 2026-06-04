@@ -3,15 +3,15 @@ import { Button } from "../ui/Button";
 import { FilterSection } from "./FilterSection";
 
 export interface FilterSidebarProps {
-  categories: string[];
+  categories: { id: string; name: string }[];
   brands: string[];
   filters: {
-    categories: string[];
+    categoryIds: string[];
     brands: string[];
     priceRange: [number, number];
     inStockOnly: boolean;
   };
-  toggleCategory: (category: string) => void;
+  toggleCategory: (categoryId: string) => void;
   toggleBrand: (brand: string) => void;
   setFilters: React.Dispatch<
     React.SetStateAction<FilterSidebarProps["filters"]>
@@ -35,10 +35,10 @@ export function FilterSidebar({
       <FilterSection title="CATEGORÍAS">
         {categories.map((category) => (
           <Checkbox
-            key={category}
-            label={category}
-            checked={filters.categories.includes(category)}
-            onChange={() => toggleCategory(category)}
+            key={category.id}
+            label={category.name}
+            checked={filters.categoryIds.includes(category.id)}
+            onChange={() => toggleCategory(category.id)}
           />
         ))}
       </FilterSection>

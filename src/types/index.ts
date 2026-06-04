@@ -1,6 +1,7 @@
 export type { Category, CreateCategoryInput } from "./category";
 export type {
   Product,
+  ProductFilters,
   CreateProductInput,
   UpdateProductInput,
 } from "./product";

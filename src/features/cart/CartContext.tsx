@@ -26,7 +26,14 @@ const STORAGE_KEY = "nubeo_cart";
 function loadCart(): CartItem[] {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? (JSON.parse(stored) as CartItem[]) : [];
+    if (!stored) return [];
+
+    const items = JSON.parse(stored) as CartItem[];
+    // Migrate old cart items without stock field
+    return items.map((item) => ({
+      ...item,
+      stock: item.stock ?? 999, // Default to high stock for legacy items
+    }));
   } catch {
     return [];
   }
@@ -42,12 +49,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addToCart = useCallback((product: Product, quantity: number) => {
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
+      const currentQuantity = existing?.quantity ?? 0;
+      const newQuantity = currentQuantity + quantity;
+
+      if (newQuantity > product.stock) {
+        return prev;
+      }
 
       if (existing) {
         return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + quantity }
-            : item,
+          item.id === product.id ? { ...item, quantity: newQuantity } : item,
         );
       }
 
@@ -59,6 +70,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           brand: product.brand,
           price: product.price,
           quantity,
+          stock: product.stock,
           image: product.images[0] ?? null,
         },
       ];
@@ -73,7 +85,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((prev) =>
       prev.map((item) =>
         item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
+          ? {
+              ...item,
+              quantity: Math.max(
+                1,
+                Math.min(item.stock, item.quantity + delta),
+              ),
+            }
           : item,
       ),
     );

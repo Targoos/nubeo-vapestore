@@ -4,5 +4,6 @@ export interface CartItem {
   brand: string | null;
   price: number;
   quantity: number;
+  stock: number;
   image: string | null;
 }

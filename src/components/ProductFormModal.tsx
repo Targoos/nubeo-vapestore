@@ -75,7 +75,10 @@ export function ProductFormModal({
     }
   };
 
-  const handleChange = (field: keyof CreateProductInput, value: any) => {
+  const handleChange = (
+    field: keyof CreateProductInput,
+    value: string | number | boolean | string[] | null,
+  ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
