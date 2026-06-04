@@ -18,7 +18,7 @@ export function LoginPage() {
 
   const from = (location.state as { from?: Location })?.from?.pathname || "/";
 
-  const handleSubmit = async (e: { preventDefault(): void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);

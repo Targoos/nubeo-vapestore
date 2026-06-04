@@ -138,7 +138,7 @@ export function CatalogPage() {
   useEffect(() => {
     setVisibleProducts([]);
     setCurrentPage(1);
-  }, [filters, sortBy]);
+  }, [filters, sortBy, currentPage]);
 
   const toggleCategory = (categoryId: string) => {
     setFilters((prev) => ({

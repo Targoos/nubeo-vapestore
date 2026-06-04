@@ -19,7 +19,7 @@ export async function getProducts(
     query = query.ilike("name", `%${filters.search}%`);
   }
 
-  if (filters.onlyActive !== false) {
+  if (filters.onlyActive === true) {
     query = query.eq("is_active", true);
   }
 

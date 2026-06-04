@@ -29,7 +29,6 @@ function loadCart(): CartItem[] {
     if (!stored) return [];
 
     const items = JSON.parse(stored) as CartItem[];
-    // Filter out legacy items without stock field
     return items.filter((item) => item.stock !== undefined);
   } catch {
     return [];
