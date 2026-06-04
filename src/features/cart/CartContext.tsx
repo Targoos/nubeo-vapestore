@@ -11,7 +11,7 @@ import type { CartItem } from "../../types/cart";
 
 interface CartContextValue {
   items: CartItem[];
-  addToCart: (product: Product, quantity: number) => void;
+  addToCart: (product: Product, quantity: number) => boolean;
   removeFromCart: (id: string) => void;
   updateQuantity: (id: string, delta: number) => void;
   clearCart: () => void;
@@ -29,11 +29,8 @@ function loadCart(): CartItem[] {
     if (!stored) return [];
 
     const items = JSON.parse(stored) as CartItem[];
-    // Migrate old cart items without stock field
-    return items.map((item) => ({
-      ...item,
-      stock: item.stock ?? 999, // Default to high stock for legacy items
-    }));
+    // Filter out legacy items without stock field
+    return items.filter((item) => item.stock !== undefined);
   } catch {
     return [];
   }
@@ -47,6 +44,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items]);
 
   const addToCart = useCallback((product: Product, quantity: number) => {
+    let added = false;
     setItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       const currentQuantity = existing?.quantity ?? 0;
@@ -55,6 +53,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (newQuantity > product.stock) {
         return prev;
       }
+
+      added = true;
 
       if (existing) {
         return prev.map((item) =>
@@ -75,6 +75,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         },
       ];
     });
+    return added;
   }, []);
 
   const removeFromCart = useCallback((id: string) => {

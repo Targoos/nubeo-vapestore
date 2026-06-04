@@ -108,7 +108,7 @@ export function FeaturedProducts() {
                 brand={product.brand ?? undefined}
                 price={product.price}
                 visible={visibleCards.includes(index)}
-                onAddToCart={() => addToCart(product, 1)}
+                onAddToCart={() => addToCart(product, 1) ?? false}
               />
             ))}
           </div>

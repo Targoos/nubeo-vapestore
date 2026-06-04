@@ -234,9 +234,11 @@ export function ProductPage() {
                 <button
                   disabled={product.stock === 0}
                   onClick={() => {
-                    addToCart(product, quantity);
-                    setIsAdded(true);
-                    setTimeout(() => setIsAdded(false), 2000);
+                    const added = addToCart(product, quantity);
+                    if (added) {
+                      setIsAdded(true);
+                      setTimeout(() => setIsAdded(false), 2000);
+                    }
                   }}
                   className={`w-full py-4 text-black text-xs font-semibold tracking-[0.1em] uppercase rounded-md transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed ${
                     isAdded

@@ -8,7 +8,7 @@ interface ProductCardProps {
   price: number;
   image?: string;
   visible?: boolean;
-  onAddToCart?: () => void;
+  onAddToCart?: () => boolean;
 }
 
 export function ProductCard({
@@ -39,9 +39,11 @@ export function ProductCard({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              onAddToCart?.();
-              setIsAdded(true);
-              setTimeout(() => setIsAdded(false), 2000);
+              const added = onAddToCart?.();
+              if (added) {
+                setIsAdded(true);
+                setTimeout(() => setIsAdded(false), 2000);
+              }
             }}
             className={`px-6 py-2.5 text-black text-xs font-semibold uppercase tracking-[0.1em] rounded-md transition-colors cursor-pointer ${
               isAdded

@@ -277,7 +277,7 @@ export function CatalogPage() {
                           brand={product.brand ?? undefined}
                           price={product.price}
                           visible={visibleProducts.includes(index)}
-                          onAddToCart={() => addToCart(product, 1)}
+                          onAddToCart={() => addToCart(product, 1) ?? false}
                         />
                       </div>
                     ))}
