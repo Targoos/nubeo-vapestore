@@ -36,6 +36,7 @@ export function CatalogPage() {
   });
   const [sortBy, setSortBy] = useState("relevance");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [visibleProducts, setVisibleProducts] = useState<number[]>([]);
   const productRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -99,6 +100,14 @@ export function CatalogPage() {
       });
   }, [allProducts, filters, sortBy]);
 
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * 9;
+    const endIndex = startIndex + 9;
+    return filteredProducts.slice(startIndex, endIndex);
+  }, [filteredProducts, currentPage]);
+
+  const totalPages = Math.ceil(filteredProducts.length / 9);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -124,10 +133,11 @@ export function CatalogPage() {
     });
 
     return () => observer.disconnect();
-  }, [filteredProducts]);
+  }, [paginatedProducts]);
 
   useEffect(() => {
     setVisibleProducts([]);
+    setCurrentPage(1);
   }, [filters, sortBy]);
 
   const toggleCategory = (category: string) => {
@@ -253,7 +263,7 @@ export function CatalogPage() {
               {!loading && !error && (
                 <>
                   <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredProducts.map((product, index) => (
+                    {paginatedProducts.map((product, index) => (
                       <div
                         key={product.id}
                         ref={(el) => {
@@ -287,8 +297,9 @@ export function CatalogPage() {
 
                   {filteredProducts.length > 0 && (
                     <Pagination
-                      currentPage={1}
-                      totalPages={Math.ceil(filteredProducts.length / 9)}
+                      currentPage={currentPage}
+                      totalPages={totalPages}
+                      onPageChange={setCurrentPage}
                     />
                   )}
                 </>
