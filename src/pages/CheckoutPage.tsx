@@ -46,6 +46,7 @@ function CheckoutForm() {
   const [email, setEmail] = useState(user?.email ?? "");
   const [isProcessing, setIsProcessing] = useState(false);
   const [stripeError, setStripeError] = useState<string | null>(null);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
   if (items.length === 0) {
     return (
@@ -70,6 +71,7 @@ function CheckoutForm() {
 
     setIsProcessing(true);
     setStripeError(null);
+    setOrderError(null);
 
     const { data, error: fnError } = await supabase.functions.invoke(
       "create-payment-intent",
@@ -128,6 +130,10 @@ function CheckoutForm() {
         });
       } catch (orderError) {
         console.error("Pago exitoso pero error al guardar pedido:", orderError);
+        setOrderError(
+          `Tu pago fue procesado exitosamente. Hubo un problema al guardar tu pedido, por favor contactá a soporte con este número: ${paymentIntent.id}`,
+        );
+        setIsProcessing(false);
       }
     }
   };
@@ -256,6 +262,12 @@ function CheckoutForm() {
             {stripeError && (
               <div className="border border-red-900 bg-red-950/30 px-4 py-3">
                 <p className="text-red-400 text-sm">{stripeError}</p>
+              </div>
+            )}
+
+            {orderError && (
+              <div className="border border-yellow-900 bg-yellow-950/30 px-4 py-3">
+                <p className="text-yellow-400 text-sm">{orderError}</p>
               </div>
             )}
 
