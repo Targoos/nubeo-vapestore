@@ -74,6 +74,14 @@ export function Navbar() {
                 >
                   MI CUENTA
                 </Link>
+                {user.user_metadata?.role === "admin" && (
+                  <Link
+                    to="/admin"
+                    className="text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase hidden md:block"
+                  >
+                    ADMIN
+                  </Link>
+                )}
                 <button
                   onClick={handleSignOut}
                   className="text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-red-400 transition-colors uppercase hidden md:block"
@@ -156,6 +164,14 @@ export function Navbar() {
                   >
                     MI CUENTA
                   </Link>
+                  {user.user_metadata?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="block py-3 text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-white transition-colors uppercase"
+                    >
+                      ADMIN
+                    </Link>
+                  )}
                   <button
                     onClick={handleSignOut}
                     className="block w-full text-left py-3 text-xs font-medium tracking-[0.15em] text-[#444444] hover:text-red-400 transition-colors uppercase"
